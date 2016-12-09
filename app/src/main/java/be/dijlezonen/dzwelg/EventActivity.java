@@ -4,6 +4,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.GridView;
+import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -21,20 +22,22 @@ public class EventActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.activity_event_titel));
 
-//        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_evenementen));
-//
-//
-//        GridView eventsGrid = ButterKnife.findById(this, R.id.gridEvents);
-//
-//        FirebaseListAdapter<Evenement> fbList = new FirebaseListAdapter<Evenement>(
-//                this, Evenement.class,
-//        ) {
-//            @Override
-//            protected void populateView(View v, Evenement model, int position) {
-//
-//            }
-//        }
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_evenementen));
 
+
+        GridView eventsGrid = ButterKnife.findById(this, R.id.gridEvents);
+
+        FirebaseListAdapter<Evenement> fbList = new FirebaseListAdapter<Evenement>(
+                this, Evenement.class, R.layout.event, dbRef
+        ) {
+            @Override
+            protected void populateView(View v, Evenement model, int position) {
+                TextView txtTitel = ButterKnife.findById(v, R.id.txt_event_titel);
+                txtTitel.setText(model.getTitel());
+            }
+        };
+
+        eventsGrid.setAdapter(fbList);
 
     }
 }
