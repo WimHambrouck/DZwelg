@@ -1,3 +1,14 @@
 <resources>
     <string name="app_name">DZwelg</string>
+    <string name="title_activity_event">Kies een evenement</string>
+    <string name="email">E-mail</string>
+    <string name="password">Wachtwoord</string>
+    <string name="confirm_password">Wachtwoord bevestigen</string>
+    <string name="sign_in">Aanmelden</string>
+    <string name="kies_evenement">Kies evenement</string>
+    <string name="wachtwoord_vergeten">Wachtwoord vergeten?</string>
+    <string name="bezig_aanmelden">Bezig met aanmelden...</string>
+    <string name="aanmelden_mislukt">Aanmelden mislukt!</string>
+    <string name="ongeldig_email">Ongeldig e-mailadres</string>
+    <string name="wachtwoord_te_kort">Wachtwoord moet minimum 6 karakters lang zijn</string>
 </resources>
