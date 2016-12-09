@@ -10,4 +10,15 @@
     android:paddingTop="@dimen/activity_vertical_margin"
     tools:context="be.dijlezonen.dzwelg.EventActivity">
 
+    <GridView
+        android:id="@+id/gridEvents"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentLeft="true"
+        android:layout_alignParentStart="true"
+        android:numColumns="auto_fit"
+        android:descendantFocusability="beforeDescendants"
+        />
+
 </RelativeLayout>

@@ -49,8 +49,7 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
                 FirebaseCrash.report(task.getException());
                 String toastMessage = getString(R.string.fout_onbekend);
-                if(task.getException() != null)
-                {
+                if (task.getException() != null) {
                     toastMessage = task.getException().getMessage();
                 }
                 Toast.makeText(
