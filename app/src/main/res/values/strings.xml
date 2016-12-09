@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">DZwelg</string>
-    <string name="title_activity_event">Kies een evenement</string>
+    <string name="activity_event_titel">Kies een evenement</string>
     <string name="email">E-mail</string>
     <string name="password">Wachtwoord</string>
     <string name="confirm_password">Wachtwoord bevestigen</string>
