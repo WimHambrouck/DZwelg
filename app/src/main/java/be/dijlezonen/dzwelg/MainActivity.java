@@ -3,6 +3,7 @@ package be.dijlezonen.dzwelg;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 
+@java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
 public class MainActivity extends AppCompatActivity {
 
     @Override
