@@ -11,4 +11,5 @@
     <string name="aanmelden_mislukt">Aanmelden mislukt!</string>
     <string name="ongeldig_email">Ongeldig e-mailadres</string>
     <string name="wachtwoord_te_kort">Wachtwoord moet minimum 6 karakters lang zijn</string>
+    <string name="fout_onbekend">Onbekende fout, probeer het later opnieuw.</string>
 </resources>
