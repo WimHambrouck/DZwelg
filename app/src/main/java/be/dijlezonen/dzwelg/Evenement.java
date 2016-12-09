@@ -3,7 +3,8 @@ package be.dijlezonen.dzwelg;
 import java.util.Calendar;
 import java.util.Locale;
 
-class Evenement {
+@SuppressWarnings("WeakerAccess")
+public class Evenement {
     private String id;
     private String titel;
     private Long aangemaakt;
@@ -20,7 +21,7 @@ class Evenement {
         this.id = id;
     }
 
-    String getTitel() {
+    public String getTitel() {
         return titel;
     }
 
@@ -28,7 +29,7 @@ class Evenement {
         this.titel = titel;
     }
 
-    Calendar getAangemaakt(){
+    public Calendar getAangemaakt(){
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(aangemaakt);
         return cal;
