@@ -74,7 +74,7 @@ public class MainActivity extends AppCompatActivity {
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
                 if (user != null) {
-                    // user is signed in, start EventActivity
+                    // user is signed in, start EventListActivity
                     signInSucces();
                 } else {
                     // user is signed out
@@ -100,8 +100,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signInSucces() {
-        Intent main = new Intent(MainActivity.this, EventActivity.class);
-        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //clear top of the stack, making EventActivity the first in the backstack
+        Intent main = new Intent(MainActivity.this, EventListActivity.class);
+        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //clear top of the stack, making EventListActivity the first in the backstack
         startActivity(main);
     }
 

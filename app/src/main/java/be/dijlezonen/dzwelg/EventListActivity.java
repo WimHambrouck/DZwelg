@@ -14,12 +14,12 @@ import com.google.firebase.database.FirebaseDatabase;
 import butterknife.ButterKnife;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
-public class EventActivity extends AppCompatActivity {
+public class EventListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_event);
+        setContentView(R.layout.activity_event_list);
 
         setTitle(getString(R.string.activity_event_titel));
 
@@ -37,7 +37,7 @@ public class EventActivity extends AppCompatActivity {
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(EventActivity.this, model.getAangemaakt().getTime().toString(), Toast.LENGTH_LONG).show();
+                        Toast.makeText(EventListActivity.this, model.getAangemaakt().getTime().toString(), Toast.LENGTH_LONG).show();
                     }
                 });
             }
