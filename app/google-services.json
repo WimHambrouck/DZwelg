@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "258825135187",
+    "firebase_url": "https://dzwelg-dev.firebaseio.com",
+    "project_id": "dzwelg-dev",
+    "storage_bucket": "dzwelg-dev.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:258825135187:android:afd519276067d39b",
+        "android_client_info": {
+          "package_name": "be.dijlezonen.dzwelg"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "258825135187-itis7evkp9gqbo34aquv5pap233ald35.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "be.dijlezonen.dzwelg",
+            "certificate_hash": "2168E782CC844EA197F49A0BB231EAE9C3BFC207"
+          }
+        },
+        {
+          "client_id": "258825135187-j05gsssv7rt5bqgvat671gscms3g3a1i.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCO0r0wxyNF17j3bYyhPEvTPfoYeVuVrQo"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "258825135187-j05gsssv7rt5bqgvat671gscms3g3a1i.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
