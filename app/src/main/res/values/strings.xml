@@ -14,4 +14,5 @@
     <string name="fout_onbekend">Onbekende fout, probeer het later opnieuw.</string>
     <string name="even_wachten">Even wachten</string>
     <string name="laden_van_evenementen">Bezig met laden van evenementen...</string>
+    <string name="afmelden">Afmelden</string>
 </resources>

@@ -33,13 +33,13 @@ public class MainActivity extends AppCompatActivity {
     EditText mTxtEmail;
     @BindView(R.id.txtWachtwoord)
     EditText mTxtWachtwoord;
-    private FirebaseAuth firebaseAuth;
-    private FirebaseAuth.AuthStateListener firebaseAuthStateListener;
-    private ProgressDialog progressDialog;
-    private OnCompleteListener<AuthResult> firebaseAuthOnCompleteListener = new OnCompleteListener<AuthResult>() {
+    private FirebaseAuth mFirebaseAuth;
+    private FirebaseAuth.AuthStateListener mFirebaseAuthStateListener;
+    private ProgressDialog mProgressDialog;
+    private OnCompleteListener<AuthResult> mFirebaseAuthOnCompleteListener = new OnCompleteListener<AuthResult>() {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            progressDialog.dismiss();
+            mProgressDialog.dismiss();
             Log.d(LOG_TAG, "Firebase auth result: " + task.isSuccessful());
 
             // If sign in fails, display a message to the user. If sign in succeeds
@@ -66,10 +66,10 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         // get firebase authorisation
-        firebaseAuth = FirebaseAuth.getInstance();
+        mFirebaseAuth = FirebaseAuth.getInstance();
 
         //listen to firebase authorisation state to check when user is logged in
-        firebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
+        mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
             @Override
             public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
                 FirebaseUser user = firebaseAuth.getCurrentUser();
@@ -88,14 +88,14 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onStart() {
         super.onStart();
-        firebaseAuth.addAuthStateListener(firebaseAuthStateListener);
+        mFirebaseAuth.addAuthStateListener(mFirebaseAuthStateListener);
     }
 
     @Override
     protected void onStop() {
         super.onStop();
-        if (firebaseAuthStateListener != null) {
-            firebaseAuth.removeAuthStateListener(firebaseAuthStateListener);
+        if (mFirebaseAuthStateListener != null) {
+            mFirebaseAuth.removeAuthStateListener(mFirebaseAuthStateListener);
         }
     }
 
@@ -113,8 +113,8 @@ public class MainActivity extends AppCompatActivity {
             String email = mTxtEmail.getText().toString();
             String wachtwoord = mTxtWachtwoord.getText().toString();
 
-            firebaseAuth.signInWithEmailAndPassword(email, wachtwoord)
-                    .addOnCompleteListener(this, firebaseAuthOnCompleteListener);
+            mFirebaseAuth.signInWithEmailAndPassword(email, wachtwoord)
+                    .addOnCompleteListener(this, mFirebaseAuthOnCompleteListener);
 
         }
     }
@@ -144,10 +144,10 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showProgressDialog() {
-        progressDialog = new ProgressDialog(this);
-        progressDialog.setIndeterminate(true);
-        progressDialog.setCancelable(false);
-        progressDialog.setMessage(getString(R.string.bezig_aanmelden));
-        progressDialog.show();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setIndeterminate(true);
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setMessage(getString(R.string.bezig_aanmelden));
+        mProgressDialog.show();
     }
 }
