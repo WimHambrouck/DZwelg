@@ -12,4 +12,6 @@
     <string name="ongeldig_email">Ongeldig e-mailadres</string>
     <string name="wachtwoord_te_kort">Wachtwoord moet minimum 6 karakters lang zijn</string>
     <string name="fout_onbekend">Onbekende fout, probeer het later opnieuw.</string>
+    <string name="even_wachten">Even wachten</string>
+    <string name="laden_van_evenementen">Bezig met laden van evenementen...</string>
 </resources>
