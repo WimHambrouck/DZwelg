@@ -1,6 +1,7 @@
 package be.dijlezonen.dzwelg;
 
 import android.app.ProgressDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -43,7 +44,9 @@ public class EventListActivity extends AppCompatActivity {
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Toast.makeText(EventListActivity.this, model.getAangemaakt().getTime().toString(), Toast.LENGTH_LONG).show();
+                        Intent intent = new Intent(EventListActivity.this, EventActivity.class);
+                        intent.putExtra("event", model.getTitel());
+                        startActivity(intent);
                     }
                 });
             }
