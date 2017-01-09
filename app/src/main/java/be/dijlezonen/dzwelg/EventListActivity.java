@@ -3,7 +3,6 @@ package be.dijlezonen.dzwelg;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -14,7 +13,6 @@ import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
@@ -44,8 +42,7 @@ public class EventListActivity extends AppCompatActivity {
 
             @Override
             protected void populateView(View v, final Evenement model, int position) {
-                if(mProgressDialog.isShowing())
-                {
+                if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
                 TextView txtTitel = ButterKnife.findById(v, R.id.txt_event_titel);
@@ -53,8 +50,8 @@ public class EventListActivity extends AppCompatActivity {
                 v.setOnClickListener(new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        Intent intent = new Intent(EventListActivity.this, EventActivity.class);
-                        intent.putExtra("event", model.getTitel());
+                        Intent intent = new Intent(EventListActivity.this, UserListActivity.class);
+                        intent.putExtra(getString(R.string.extra_event_title), model.getTitel());
                         startActivity(intent);
                     }
                 });

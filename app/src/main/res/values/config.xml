@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
     <string name="ref_evenementen" translatable="false">evenementen</string>
+    <string name="extra_event_title">event</string>
 </resources>

@@ -15,4 +15,7 @@
     <string name="even_wachten">Even wachten</string>
     <string name="laden_van_evenementen">Bezig met laden van evenementen...</string>
     <string name="afmelden">Afmelden</string>
+    <string name="title_user_list">Users</string>
+    <string name="title_user_detail">User Detail</string>
+    <string name="laden_gebruikers">Bezig met laden van gebruikers...</string>
 </resources>

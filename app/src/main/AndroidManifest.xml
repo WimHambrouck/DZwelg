@@ -16,7 +16,27 @@
             </intent-filter>
         </activity>
         <activity android:name=".EventListActivity" />
-        <activity android:name=".EventActivity" android:parentActivityName=".EventListActivity"/>
+        <activity
+            android:name=".EventActivity"
+            android:parentActivityName=".EventListActivity" />
+        <activity
+            android:name=".UserListActivity"
+            android:label="@string/title_user_list"
+            android:parentActivityName=".EventListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.dijlezonen.dzwelg.EventListActivity" />
+        </activity>
+        <activity
+            android:name=".UserDetailActivity"
+            android:label="@string/title_user_detail"
+            android:parentActivityName=".UserListActivity"
+            android:theme="@style/AppTheme.NoActionBar">
+            <meta-data
+                android:name="android.support.PARENT_ACTIVITY"
+                android:value="be.dijlezonen.dzwelg.UserListActivity" />
+        </activity>
     </application>
 
 </manifest>
