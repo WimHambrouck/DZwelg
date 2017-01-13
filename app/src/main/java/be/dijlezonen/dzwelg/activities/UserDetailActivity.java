@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.activities;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -10,12 +10,16 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.app.ActionBar;
 import android.view.MenuItem;
 
+import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.fragments.UserDetailFragment;
+
 /**
  * An activity representing a single User detail screen. This
  * activity is only used narrow width devices. On tablet-size devices,
  * item details are presented side-by-side with a list of items
  * in a {@link UserListActivity}.
  */
+@java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
 public class UserDetailActivity extends AppCompatActivity {
 
     @Override

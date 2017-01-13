@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.fragments;
 
 import android.app.Activity;
 import android.os.Bundle;
@@ -10,6 +10,11 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import java.util.Locale;
+
+import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.activities.UserDetailActivity;
+import be.dijlezonen.dzwelg.activities.UserListActivity;
+import be.dijlezonen.dzwelg.models.Lid;
 
 /**
  * A fragment representing a single User detail screen.

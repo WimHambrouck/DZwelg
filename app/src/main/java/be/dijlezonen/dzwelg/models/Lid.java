@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.models;
 
 public class Lid {
     private String id;

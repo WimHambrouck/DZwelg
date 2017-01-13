@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.activities;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -25,6 +25,10 @@ import com.google.firebase.database.FirebaseDatabase;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.fragments.UserDetailFragment;
+import be.dijlezonen.dzwelg.models.Lid;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
@@ -130,11 +134,13 @@ public class UserListActivity extends AppCompatActivity {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Lid lid = dataSnapshot.getValue(Lid.class);
                 mLeden.set(mLeden.indexOf(lid), lid);
+                mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 mLeden.remove(dataSnapshot.getValue(Lid.class));
+                mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override
@@ -147,7 +153,6 @@ public class UserListActivity extends AppCompatActivity {
                 Log.e(LOG_TAG, databaseError.getMessage());
             }
         });
-
     }
 
     public class SimpleItemRecyclerViewAdapter
@@ -169,7 +174,6 @@ public class UserListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mLid = mLeden.get(position);
-            // holder.mIdView.setText(mLeden.get(position).id);
             holder.mContentView.setText(mLeden.get(position).getVoornaam());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
@@ -201,14 +205,12 @@ public class UserListActivity extends AppCompatActivity {
 
         public class ViewHolder extends RecyclerView.ViewHolder {
             public final View mView;
-            //public final TextView mIdView;
             public final TextView mContentView;
             public Lid mLid;
 
             public ViewHolder(View view) {
                 super(view);
                 mView = view;
-                //mIdView = (TextView) view.findViewById(R.id.id);
                 mContentView = (TextView) view.findViewById(R.id.content);
             }
 

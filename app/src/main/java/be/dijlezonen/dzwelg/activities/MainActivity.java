@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -19,6 +19,7 @@ import com.google.firebase.crash.FirebaseCrash;
 
 import java.util.Locale;
 
+import be.dijlezonen.dzwelg.R;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -36,34 +37,14 @@ public class MainActivity extends AppCompatActivity {
     private FirebaseAuth mFirebaseAuth;
     private FirebaseAuth.AuthStateListener mFirebaseAuthStateListener;
     private ProgressDialog mProgressDialog;
-    private OnCompleteListener<AuthResult> mFirebaseAuthOnCompleteListener = new OnCompleteListener<AuthResult>() {
-        @Override
-        public void onComplete(@NonNull Task<AuthResult> task) {
-            mProgressDialog.dismiss();
-            Log.d(LOG_TAG, "Firebase auth result: " + task.isSuccessful());
-
-            // If sign in fails, display a message to the user. If sign in succeeds
-            // the auth state listener will be notified and logic to handle the
-            // signed in user is handled in the listener.
-            if (!task.isSuccessful()) {
-                FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
-                FirebaseCrash.report(task.getException());
-                String toastMessage = getString(R.string.fout_onbekend);
-                if (task.getException() != null) {
-                    toastMessage = task.getException().getMessage();
-                }
-                Toast.makeText(
-                        MainActivity.this,
-                        String.format(Locale.getDefault(), "%s %s", getString(R.string.aanmelden_mislukt), toastMessage),
-                        Toast.LENGTH_LONG).show();
-            }
-        }
-    };
+    private OnCompleteListener<AuthResult> mFirebaseAuthOnCompleteListener;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        mFirebaseAuthOnCompleteListener = new AuthCompleteListener();
 
         // get firebase authorisation
         mFirebaseAuth = FirebaseAuth.getInstance();
@@ -76,8 +57,6 @@ public class MainActivity extends AppCompatActivity {
                 if (user != null) {
                     // user is signed in, start EventListActivity
                     signInSucces();
-                } else {
-                    // user is signed out
                 }
             }
         };
@@ -149,5 +128,30 @@ public class MainActivity extends AppCompatActivity {
         mProgressDialog.setCancelable(false);
         mProgressDialog.setMessage(getString(R.string.bezig_aanmelden));
         mProgressDialog.show();
+    }
+
+    private class AuthCompleteListener implements OnCompleteListener<AuthResult> {
+        @Override
+        public void onComplete(@NonNull Task<AuthResult> task) {
+            mProgressDialog.dismiss();
+            Log.d(LOG_TAG, "Firebase auth result: " + task.isSuccessful());
+
+            // If sign in fails, display a message to the user. If sign in succeeds
+            // the auth state listener will be notified and logic to handle the
+            // signed in user is handled in the listener.
+            if (!task.isSuccessful()) {
+                FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
+                FirebaseCrash.report(task.getException());
+                String toastMessage = getString(R.string.fout_onbekend);
+                if (task.getException() != null) {
+                    toastMessage = task.getException().getMessage();
+                    FirebaseCrash.report(task.getException());
+                }
+                Toast.makeText(
+                        MainActivity.this,
+                        String.format(Locale.getDefault(), "%s %s", getString(R.string.aanmelden_mislukt), toastMessage),
+                        Toast.LENGTH_LONG).show();
+            }
+        }
     }
 }

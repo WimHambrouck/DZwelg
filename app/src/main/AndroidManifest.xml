@@ -8,34 +8,34 @@
         android:label="@string/app_name"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".EventListActivity" />
+        <activity android:name=".activities.EventListActivity" />
         <activity
-            android:name=".EventActivity"
-            android:parentActivityName=".EventListActivity" />
+            android:name=".activities.EventActivity"
+            android:parentActivityName=".activities.EventListActivity" />
         <activity
-            android:name=".UserListActivity"
+            android:name=".activities.UserListActivity"
             android:label="@string/title_user_list"
-            android:parentActivityName=".EventListActivity"
+            android:parentActivityName=".activities.EventListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.dijlezonen.dzwelg.EventListActivity" />
+                android:value="be.dijlezonen.dzwelg.activities.EventListActivity" />
         </activity>
         <activity
-            android:name=".UserDetailActivity"
+            android:name=".activities.UserDetailActivity"
             android:label="@string/title_user_detail"
-            android:parentActivityName=".UserListActivity"
+            android:parentActivityName=".activities.UserListActivity"
             android:theme="@style/AppTheme.NoActionBar">
             <meta-data
                 android:name="android.support.PARENT_ACTIVITY"
-                android:value="be.dijlezonen.dzwelg.UserListActivity" />
+                android:value="be.dijlezonen.dzwelg.activities.UserListActivity" />
         </activity>
     </application>
 

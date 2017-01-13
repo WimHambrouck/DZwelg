@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.activities;
 
 import android.app.ProgressDialog;
 import android.content.Intent;
@@ -16,6 +16,8 @@ import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
+import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.models.Evenement;
 import butterknife.ButterKnife;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
