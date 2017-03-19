@@ -184,6 +184,7 @@ public class UserListActivity extends AppCompatActivity {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
+                        holder.mView.setSelected(true);
                         Bundle arguments = new Bundle();
                         arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
                         UserDetailFragment fragment = new UserDetailFragment();
