@@ -30,6 +30,8 @@ import java.util.List;
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.fragments.UserDetailFragment;
 import be.dijlezonen.dzwelg.models.Lid;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 
@@ -157,33 +159,33 @@ public class UserListActivity extends AppCompatActivity {
         });
     }
 
-    public class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<SimpleItemRecyclerViewAdapter.ViewHolder> {
+    private class SimpleItemRecyclerViewAdapter
+            extends RecyclerView.Adapter<LidViewHolder> {
 
         private final List<Lid> mLeden;
 
-        public SimpleItemRecyclerViewAdapter(List<Lid> leden) {
+        SimpleItemRecyclerViewAdapter(List<Lid> leden) {
             mLeden = leden;
         }
 
         @Override
-        public ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public LidViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.user_list_content, parent, false);
-            return new ViewHolder(view);
+            return new LidViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final ViewHolder holder, int position) {
-            holder.mLid = mLeden.get(position);
-            holder.mContentView.setText(mLeden.get(position).getVolledigeNaam());
+        public void onBindViewHolder(final LidViewHolder holder, int position) {
+            final Lid lid = mLeden.get(position);
+            holder.mTxtLidNaam.setText(lid.getVolledigeNaam());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
                     if (mTwoPane) {
                         Bundle arguments = new Bundle();
-                        arguments.putString(UserDetailFragment.ARG_ITEM_ID, holder.mLid.getId());
+                        arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
                         UserDetailFragment fragment = new UserDetailFragment();
                         fragment.setArguments(arguments);
                         getSupportFragmentManager().beginTransaction()
@@ -192,8 +194,7 @@ public class UserListActivity extends AppCompatActivity {
                     } else {
                         Context context = v.getContext();
                         Intent intent = new Intent(context, UserDetailActivity.class);
-                        intent.putExtra(UserDetailFragment.ARG_ITEM_ID, holder.mLid.getId());
-
+                        intent.putExtra(UserDetailFragment.ARG_ITEM_ID, lid.getId());
                         context.startActivity(intent);
                     }
                 }
@@ -205,21 +206,18 @@ public class UserListActivity extends AppCompatActivity {
             return mLeden.size();
         }
 
-        public class ViewHolder extends RecyclerView.ViewHolder {
-            public final View mView;
-            public final TextView mContentView;
-            public Lid mLid;
+    }
 
-            public ViewHolder(View view) {
-                super(view);
-                mView = view;
-                mContentView = (TextView) view.findViewById(R.id.content);
-            }
+    static class LidViewHolder extends RecyclerView.ViewHolder {
+        final View mView;
 
-            @Override
-            public String toString() {
-                return super.toString() + " '" + mContentView.getText() + "'";
-            }
+        @BindView(R.id.user_list_lid_naam)
+        TextView mTxtLidNaam;
+
+        LidViewHolder(View view) {
+            super(view);
+            mView = view;
+            ButterKnife.bind(this, view);
         }
     }
 }
