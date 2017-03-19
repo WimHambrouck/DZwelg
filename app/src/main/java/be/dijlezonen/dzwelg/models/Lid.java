@@ -52,7 +52,7 @@ public class Lid {
 
     public String getSaldoGeformatteerd()
     {
-        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        NumberFormat format = NumberFormat.getCurrencyInstance();
         format.setCurrency(Currency.getInstance("EUR"));
         return format.format(saldo);
     }
