@@ -118,7 +118,7 @@ public class UserListActivity extends AppCompatActivity {
     }
 
     private void setupRecyclerView() {
-        DatabaseReference ledenRef = FirebaseDatabase.getInstance().getReference("leden");
+        DatabaseReference ledenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
 
         ledenRef.addChildEventListener(new ChildEventListener() {
             @Override

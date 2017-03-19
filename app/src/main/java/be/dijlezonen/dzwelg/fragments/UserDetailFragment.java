@@ -9,12 +9,20 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.util.Locale;
 
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.activities.UserDetailActivity;
 import be.dijlezonen.dzwelg.activities.UserListActivity;
 import be.dijlezonen.dzwelg.models.Lid;
+import butterknife.BindView;
+import butterknife.ButterKnife;
 
 /**
  * A fragment representing a single User detail screen.
@@ -29,17 +37,37 @@ public class UserDetailFragment extends Fragment {
      */
     public static final String ARG_ITEM_ID = "item_id";
 
-    /**
-     * The dummy content this fragment is presenting.
-     */
-    private Lid mItem;
+    private Lid mLid;
+    private DatabaseReference mLedenRef;
 
-    /**
-     * Mandatory empty constructor for the fragment manager to instantiate the
-     * fragment (e.g. upon screen orientation changes).
-     */
+    @BindView(R.id.user_detail)
+    TextView mTxtUserDetail;
+
+    private CollapsingToolbarLayout mAppBarLayout;
+
     public UserDetailFragment() {
-        // leeg
+        /*
+         * Mandatory empty constructor for the fragment manager to instantiate the
+         * fragment (e.g. upon screen orientation changes).
+         */
+    }
+
+    private ValueEventListener lidListener = new ValueEventListener() {
+        @Override
+        public void onDataChange(DataSnapshot dataSnapshot) {
+            mLid = dataSnapshot.getValue(Lid.class);
+            updateViews();
+        }
+
+        @Override
+        public void onCancelled(DatabaseError databaseError) {
+
+        }
+    };
+
+    private void setUpAppBar() {
+        Activity activity = this.getActivity();
+        mAppBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
     }
 
     @Override
@@ -47,16 +75,9 @@ public class UserDetailFragment extends Fragment {
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
-            // Load the dummy content specified by the fragment
-            // arguments. In a real-world scenario, use a Loader
-            // to load content from a content provider.
-            mItem = new Lid(); //DummyContent.ITEM_MAP.get(getArguments().getString(ARG_ITEM_ID));
-
-            Activity activity = this.getActivity();
-            CollapsingToolbarLayout appBarLayout = (CollapsingToolbarLayout) activity.findViewById(R.id.toolbar_layout);
-            if (appBarLayout != null) {
-                appBarLayout.setTitle(mItem.getAchternaam());
-            }
+            setUpAppBar();
+            mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(getArguments().getString(ARG_ITEM_ID));
+            mLedenRef.addValueEventListener(lidListener);
         }
     }
 
@@ -65,11 +86,19 @@ public class UserDetailFragment extends Fragment {
                              Bundle savedInstanceState) {
         View rootView = inflater.inflate(R.layout.user_detail, container, false);
 
-        // Show the dummy content as text in a TextView.
-        if (mItem != null) {
-            ((TextView) rootView.findViewById(R.id.user_detail)).setText(String.format(Locale.getDefault(), "%f", mItem.getSaldo()));
+        ButterKnife.bind(this, rootView);
+
+        if (mLid != null) {
+            updateViews();
         }
 
         return rootView;
+    }
+
+    private void updateViews() {
+        if (mAppBarLayout != null) {
+            mAppBarLayout.setTitle(mLid.getVolledigeNaam());
+        }
+        mTxtUserDetail.setText(String.format(Locale.getDefault(), "%f", mLid.getSaldo()));
     }
 }

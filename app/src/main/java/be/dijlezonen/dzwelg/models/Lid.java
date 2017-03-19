@@ -1,5 +1,7 @@
 package be.dijlezonen.dzwelg.models;
 
+import java.util.Locale;
+
 public class Lid {
     private String id;
     private String voornaam;
@@ -34,13 +36,16 @@ public class Lid {
         this.saldo = saldo;
     }
 
-
     public String getId() {
         return id;
     }
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getVolledigeNaam() {
+        return String.format(Locale.getDefault(), "%s %s", voornaam, achternaam);
     }
 
     @java.lang.SuppressWarnings("squid:S00122")
