@@ -1,5 +1,7 @@
 package be.dijlezonen.dzwelg.models;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Locale;
 
 public class Lid {
@@ -50,7 +52,9 @@ public class Lid {
 
     public String getSaldoGeformatteerd()
     {
-        return String.format(Locale.getDefault(), "€ %.2f", saldo);
+        NumberFormat format = NumberFormat.getCurrencyInstance(Locale.getDefault());
+        format.setCurrency(Currency.getInstance("EUR"));
+        return format.format(saldo);
     }
 
     @java.lang.SuppressWarnings("squid:S00122")
