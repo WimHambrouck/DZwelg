@@ -99,6 +99,6 @@ public class UserDetailFragment extends Fragment {
         if (mAppBarLayout != null) {
             mAppBarLayout.setTitle(mLid.getVolledigeNaam());
         }
-        mTxtUserDetail.setText(String.format(Locale.getDefault(), "%f", mLid.getSaldo()));
+        mTxtUserDetail.setText(mLid.getSaldoGeformatteerd());
     }
 }

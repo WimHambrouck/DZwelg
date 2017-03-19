@@ -48,6 +48,11 @@ public class Lid {
         return String.format(Locale.getDefault(), "%s %s", voornaam, achternaam);
     }
 
+    public String getSaldoGeformatteerd()
+    {
+        return String.format(Locale.getDefault(), "€ %.2f", saldo);
+    }
+
     @java.lang.SuppressWarnings("squid:S00122")
     @Override
     public boolean equals(Object o) {
