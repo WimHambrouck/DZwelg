@@ -22,6 +22,7 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -119,8 +120,9 @@ public class UserListActivity extends AppCompatActivity {
 
     private void setupRecyclerView() {
         DatabaseReference ledenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
+        Query q = ledenRef.orderByChild("voornaam");
 
-        ledenRef.addChildEventListener(new ChildEventListener() {
+        q.addChildEventListener(new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (mProgressDialog.isShowing()) {
@@ -174,7 +176,7 @@ public class UserListActivity extends AppCompatActivity {
         @Override
         public void onBindViewHolder(final ViewHolder holder, int position) {
             holder.mLid = mLeden.get(position);
-            holder.mContentView.setText(mLeden.get(position).getVoornaam());
+            holder.mContentView.setText(mLeden.get(position).getVolledigeNaam());
 
             holder.mView.setOnClickListener(new View.OnClickListener() {
                 @Override
