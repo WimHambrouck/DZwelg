@@ -17,22 +17,36 @@
     
     -->
 
-    <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
-        xmlns:tools="http://schemas.android.com/tools"
-        android:id="@+id/user_list"
-        android:name="be.dijlezonen.dzwelg.UserListFragment"
+    <RelativeLayout
         android:layout_width="@dimen/item_width"
-        android:layout_height="match_parent"
-        android:layout_marginLeft="16dp"
-        android:layout_marginRight="16dp"
-        app:layoutManager="LinearLayoutManager"
-        tools:context="be.dijlezonen.dzwelg.activities.UserListActivity"
-        tools:listitem="@layout/user_list_content" />
+        android:layout_height="match_parent">
+
+        <android.support.v7.widget.SearchView
+            android:id="@+id/search_view"
+            android:layout_width="@dimen/item_width"
+            android:layout_height="wrap_content" />
+
+
+        <android.support.v7.widget.RecyclerView xmlns:android="http://schemas.android.com/apk/res/android"
+            xmlns:tools="http://schemas.android.com/tools"
+            android:id="@+id/user_list"
+            android:name="be.dijlezonen.dzwelg.UserListFragment"
+            android:layout_width="@dimen/item_width"
+            android:layout_height="match_parent"
+            android:layout_below="@+id/search_view"
+            android:layout_marginLeft="16dp"
+            android:layout_marginRight="16dp"
+            app:layoutManager="LinearLayoutManager"
+            tools:context="be.dijlezonen.dzwelg.activities.UserListActivity"
+            tools:listitem="@layout/user_list_content" />
+
+    </RelativeLayout>
 
     <FrameLayout
         android:id="@+id/user_detail_container"
         android:layout_width="0dp"
         android:layout_height="match_parent"
         android:layout_weight="3" />
+
 
 </LinearLayout>
