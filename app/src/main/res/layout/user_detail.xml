@@ -1,10 +1,26 @@
-<TextView xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/user_detail"
-    style="?android:attr/textAppearanceLarge"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     android:padding="16dp"
-    android:textIsSelectable="true"
-    tools:text="€ 10,50"
-    tools:context="be.dijlezonen.dzwelg.fragments.UserDetailFragment" />
+    tools:context="be.dijlezonen.dzwelg.fragments.UserDetailFragment">
+
+    <TextView
+        android:id="@+id/user_detail_naam"
+        style="@style/TextAppearance.AppCompat.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        tools:text="Wim Hambrouck" />
+
+    <TextView
+        android:id="@+id/user_detail_saldo"
+        style="@style/TextAppearance.AppCompat.Medium"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textIsSelectable="true"
+        tools:text="€ 10,50" />
+
+
+</LinearLayout>
+

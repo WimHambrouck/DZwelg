@@ -9,6 +9,7 @@ public class Lid {
     private String voornaam;
     private String achternaam;
     private double saldo;
+    private boolean actiefInLijst;
 
     public Lid() {
         // lege constructor voor firebase
@@ -71,5 +72,13 @@ public class Lid {
     @Override
     public int hashCode() {
         return id != null ? id.hashCode() : 0;
+    }
+
+    public boolean isActiefInLijst() {
+        return actiefInLijst;
+    }
+
+    public void setActiefInLijst(boolean actiefInLijst) {
+        this.actiefInLijst = actiefInLijst;
     }
 }

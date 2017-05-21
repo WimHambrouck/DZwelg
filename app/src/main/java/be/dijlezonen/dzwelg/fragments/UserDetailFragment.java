@@ -15,8 +15,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.Locale;
-
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.activities.UserDetailActivity;
 import be.dijlezonen.dzwelg.activities.UserListActivity;
@@ -40,8 +38,11 @@ public class UserDetailFragment extends Fragment {
     private Lid mLid;
     private DatabaseReference mLedenRef;
 
-    @BindView(R.id.user_detail)
-    TextView mTxtUserDetail;
+    @BindView(R.id.user_detail_naam)
+    TextView mTxtNaam;
+
+    @BindView(R.id.user_detail_saldo)
+    TextView mTxtSaldo;
 
     private CollapsingToolbarLayout mAppBarLayout;
 
@@ -99,6 +100,7 @@ public class UserDetailFragment extends Fragment {
         if (mAppBarLayout != null) {
             mAppBarLayout.setTitle(mLid.getVolledigeNaam());
         }
-        mTxtUserDetail.setText(mLid.getSaldoGeformatteerd());
+        mTxtNaam.setText(mLid.getVolledigeNaam());
+        mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
     }
 }

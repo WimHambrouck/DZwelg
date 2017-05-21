@@ -3,6 +3,7 @@ package be.dijlezonen.dzwelg.activities;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -13,6 +14,7 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
@@ -193,10 +195,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private void filterLedenLijst(String query) {
         ArrayList<Lid> tempLijst = new ArrayList<>();
 
-        for (Lid lid : mLeden)
-        {
-            if(lid.getVolledigeNaam().toLowerCase().contains(query.toLowerCase()))
-            {
+        for (Lid lid : mLeden) {
+            if (lid.getVolledigeNaam().toLowerCase().contains(query.toLowerCase())) {
                 tempLijst.add(lid);
             }
         }
@@ -231,9 +231,14 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             final Lid lid = mGefilterdeLeden.get(position);
             holder.mTxtLidNaam.setText(lid.getVolledigeNaam());
 
-            holder.mView.setOnClickListener(view -> {
+            if (lid.isActiefInLijst()) {
+                holder.mView.setBackgroundColor(getColor(R.color.colorPrimary));
+                holder.mTxtLidNaam.setTextColor(Color.WHITE);
+            }
+
+            holder.mView.setOnClickListener((view) -> {
                 // collapse search view (zodra we op een lid krijgen, mag de filtering weg)
-                searchView.onActionViewCollapsed();
+                // searchView.onActionViewCollapsed();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
@@ -242,6 +247,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                     getSupportFragmentManager().beginTransaction()
                             .replace(R.id.user_detail_container, fragment)
                             .commit();
+                    zetActief(lid);
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, UserDetailActivity.class);
@@ -249,6 +255,20 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                     context.startActivity(intent);
                 }
             });
+        }
+
+        /**
+         * Zorgt ervoor dat het lid actief wordt gezet + refresh van adapter zodat we in de view
+         * zien dat het desbetreffende lid geslecteerd is.
+         * @param lid Het te selecteren lid
+         */
+        private void zetActief(Lid lid) {
+            for(Lid tLid : mGefilterdeLeden)
+            {
+                tLid.setActiefInLijst(false);
+            }
+            lid.setActiefInLijst(true);
+            mRecyclerView.setAdapter(mAdapter);
         }
 
         @Override
