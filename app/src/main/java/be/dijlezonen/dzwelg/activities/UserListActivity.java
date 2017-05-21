@@ -9,7 +9,6 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
@@ -18,6 +17,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Filter;
 import android.widget.Filterable;
+import android.widget.SearchView;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -77,13 +77,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
 
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
+        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
+                .setAction("Action", null).show());
         // Show the Up button in the action bar.
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -190,7 +185,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextChange(String newText) {
-        Log.d(LOG_TAG, newText);
+        Log.v(LOG_TAG, "Query changed: " + newText);
         filterLedenLijst(newText);
         return true;
     }
@@ -237,6 +232,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             holder.mTxtLidNaam.setText(lid.getVolledigeNaam());
 
             holder.mView.setOnClickListener(view -> {
+                // collapse search view (zodra we op een lid krijgen, mag de filtering weg)
+                searchView.onActionViewCollapsed();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());

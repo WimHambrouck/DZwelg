@@ -21,7 +21,7 @@
         android:layout_width="@dimen/item_width"
         android:layout_height="match_parent">
 
-        <android.support.v7.widget.SearchView
+        <SearchView
             android:id="@+id/search_view"
             android:layout_width="@dimen/item_width"
             android:layout_height="wrap_content" />
