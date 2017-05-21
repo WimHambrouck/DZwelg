@@ -18,4 +18,5 @@
     <string name="title_user_list">Users</string>
     <string name="title_user_detail">User Detail</string>
     <string name="laden_gebruikers">Bezig met laden van gebruikers...</string>
+    <string name="search_hint">Lid</string>
 </resources>

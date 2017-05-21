@@ -9,13 +9,15 @@ import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
+import android.support.v7.widget.SearchView;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.LinearLayout;
+import android.widget.Filter;
+import android.widget.Filterable;
 import android.widget.TextView;
 
 import com.google.firebase.database.ChildEventListener;
@@ -45,7 +47,7 @@ import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
  * item details side-by-side using two vertical panes.
  */
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
-public class UserListActivity extends AppCompatActivity {
+public class UserListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private static final String LOG_TAG = UserListActivity.class.getSimpleName();
     /**
@@ -59,6 +61,11 @@ public class UserListActivity extends AppCompatActivity {
     private SimpleItemRecyclerViewAdapter mAdapter;
 
     private List<Lid> mLeden;
+    private List<Lid> mGefilterdeLeden;
+
+    @BindView(R.id.search_view)
+    SearchView searchView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -90,9 +97,10 @@ public class UserListActivity extends AppCompatActivity {
         mProgressDialog.show();
 
         mLeden = new ArrayList<>();
+        mGefilterdeLeden = new ArrayList<>();
 
         mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
-        mAdapter = new SimpleItemRecyclerViewAdapter(mLeden);
+        mAdapter = new SimpleItemRecyclerViewAdapter(mGefilterdeLeden);
         setupRecyclerView();
 
         if (findViewById(R.id.user_detail_container) != null) {
@@ -102,6 +110,11 @@ public class UserListActivity extends AppCompatActivity {
             // activity should be in two-pane mode.
             mTwoPane = true;
         }
+
+        ButterKnife.bind(this);
+
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnCloseListener(this);
     }
 
     @Override
@@ -132,6 +145,7 @@ public class UserListActivity extends AppCompatActivity {
                     mProgressDialog.dismiss();
                 }
                 mLeden.add(dataSnapshot.getValue(Lid.class));
+                mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
             }
 
@@ -139,12 +153,14 @@ public class UserListActivity extends AppCompatActivity {
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Lid lid = dataSnapshot.getValue(Lid.class);
                 mLeden.set(mLeden.indexOf(lid), lid);
+                mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
             }
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
                 mLeden.remove(dataSnapshot.getValue(Lid.class));
+                mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
             }
 
@@ -160,53 +176,88 @@ public class UserListActivity extends AppCompatActivity {
         });
     }
 
-    private class SimpleItemRecyclerViewAdapter
-            extends RecyclerView.Adapter<LidViewHolder> {
+    @Override
+    public boolean onQueryTextSubmit(final String query) {
+//        LidComparator lidComparator = new LidComparator();
+//
+//        List<Lid> temp = rLeden.stream()
+//                .filter(x -> Objects.equals(x.getVolledigeNaam(), query))
+//                .collect(Collectors.toCollection(ArrayList::new));
 
-        private final List<Lid> mLeden;
+        filterLedenLijst(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.d(LOG_TAG, newText);
+        filterLedenLijst(newText);
+        return true;
+    }
+
+    private void filterLedenLijst(String query) {
+        ArrayList<Lid> tempLijst = new ArrayList<>();
+
+        for (Lid lid : mLeden)
+        {
+            if(lid.getVolledigeNaam().toLowerCase().contains(query.toLowerCase()))
+            {
+                tempLijst.add(lid);
+            }
+        }
+
+        mGefilterdeLeden = tempLijst;
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+    @Override
+    public boolean onClose() {
+        Log.d(LOG_TAG, "search closed");
+        mGefilterdeLeden = mLeden;
+        return false;
+    }
+
+    private class SimpleItemRecyclerViewAdapter
+            extends RecyclerView.Adapter<UserListActivity.LidViewHolder> {
 
         SimpleItemRecyclerViewAdapter(List<Lid> leden) {
-            mLeden = leden;
+
         }
 
         @Override
-        public LidViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+        public UserListActivity.LidViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
             View view = LayoutInflater.from(parent.getContext())
                     .inflate(R.layout.user_list_content, parent, false);
-            return new LidViewHolder(view);
+            return new UserListActivity.LidViewHolder(view);
         }
 
         @Override
-        public void onBindViewHolder(final LidViewHolder holder, int position) {
-            final Lid lid = mLeden.get(position);
+        public void onBindViewHolder(final UserListActivity.LidViewHolder holder, int position) {
+            final Lid lid = mGefilterdeLeden.get(position);
             holder.mTxtLidNaam.setText(lid.getVolledigeNaam());
 
-            holder.mView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    if (mTwoPane) {
-                        Bundle arguments = new Bundle();
-                        arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
-                        UserDetailFragment fragment = new UserDetailFragment();
-                        fragment.setArguments(arguments);
-                        getSupportFragmentManager().beginTransaction()
-                                .replace(R.id.user_detail_container, fragment)
-                                .commit();
-                    } else {
-                        Context context = v.getContext();
-                        Intent intent = new Intent(context, UserDetailActivity.class);
-                        intent.putExtra(UserDetailFragment.ARG_ITEM_ID, lid.getId());
-                        context.startActivity(intent);
-                    }
+            holder.mView.setOnClickListener(view -> {
+                if (mTwoPane) {
+                    Bundle arguments = new Bundle();
+                    arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
+                    UserDetailFragment fragment = new UserDetailFragment();
+                    fragment.setArguments(arguments);
+                    getSupportFragmentManager().beginTransaction()
+                            .replace(R.id.user_detail_container, fragment)
+                            .commit();
+                } else {
+                    Context context = view.getContext();
+                    Intent intent = new Intent(context, UserDetailActivity.class);
+                    intent.putExtra(UserDetailFragment.ARG_ITEM_ID, lid.getId());
+                    context.startActivity(intent);
                 }
             });
         }
 
         @Override
         public int getItemCount() {
-            return mLeden.size();
+            return mGefilterdeLeden.size();
         }
-
     }
 
     static class LidViewHolder extends RecyclerView.ViewHolder {
