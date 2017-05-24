@@ -38,9 +38,6 @@ public class UserDetailFragment extends Fragment {
     private Lid mLid;
     private DatabaseReference mLedenRef;
 
-    @BindView(R.id.user_detail_naam)
-    TextView mTxtNaam;
-
     @BindView(R.id.user_detail_saldo)
     TextView mTxtSaldo;
 
@@ -97,10 +94,6 @@ public class UserDetailFragment extends Fragment {
     }
 
     private void updateViews() {
-        if (mAppBarLayout != null) {
-            mAppBarLayout.setTitle(mLid.getVolledigeNaam());
-        }
-        mTxtNaam.setText(mLid.getVolledigeNaam());
         mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
     }
 }

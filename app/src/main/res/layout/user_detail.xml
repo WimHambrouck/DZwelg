@@ -7,15 +7,8 @@
     tools:context="be.dijlezonen.dzwelg.fragments.UserDetailFragment">
 
     <TextView
-        android:id="@+id/user_detail_naam"
-        style="@style/TextAppearance.AppCompat.Large"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        tools:text="Wim Hambrouck" />
-
-    <TextView
         android:id="@+id/user_detail_saldo"
-        style="@style/TextAppearance.AppCompat.Medium"
+        style="@style/HugeText"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:textIsSelectable="true"
