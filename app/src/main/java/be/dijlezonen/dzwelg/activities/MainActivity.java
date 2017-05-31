@@ -44,6 +44,12 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+        initFirebaseAuth();
+
+        ButterKnife.bind(this);
+    }
+
+    private void initFirebaseAuth() {
         mFirebaseAuthOnCompleteListener = new AuthCompleteListener();
 
         // get firebase authorisation
@@ -60,8 +66,6 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         };
-
-        ButterKnife.bind(this);
     }
 
     @Override
