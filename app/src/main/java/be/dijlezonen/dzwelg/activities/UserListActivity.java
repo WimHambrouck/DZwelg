@@ -5,8 +5,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
-import android.support.design.widget.Snackbar;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.RecyclerView;
@@ -14,14 +12,14 @@ import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.Filter;
-import android.widget.Filterable;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.github.clans.fab.FloatingActionButton;
+import com.github.clans.fab.FloatingActionMenu;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -68,36 +66,23 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     @BindView(R.id.search_view)
     SearchView searchView;
 
+    @BindView(R.id.fab_menu)
+    FloatingActionMenu mFab;
+
+    @BindView(R.id.fab_menu_credit)
+    FloatingActionButton mFabCredit;
+
+    @BindView(R.id.fab_menu_debit)
+    FloatingActionButton mFabDebit;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-
-//        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-//        fab.setOnClickListener(view -> Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-//                .setAction("Action", null).show());
-        // Show the Up button in the action bar.
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
-        }
-
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setTitle(R.string.even_wachten);
-        mProgressDialog.setMessage(getString(R.string.laden_gebruikers));
-        mProgressDialog.show();
-
-        mLeden = new ArrayList<>();
-        mGefilterdeLeden = new ArrayList<>();
-
-        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
-        mAdapter = new SimpleItemRecyclerViewAdapter(mGefilterdeLeden);
+        initActionBar();
+        showProgressDialog();
         setupRecyclerView();
 
         if (findViewById(R.id.user_detail_container) != null) {
@@ -112,6 +97,26 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
+        mFabCredit.setOnClickListener(v -> Toast.makeText(v.getContext(), "MEER GELD", Toast.LENGTH_SHORT).show());
+        mFabDebit.setOnClickListener(view -> Toast.makeText(view.getContext(), "SMIJT het maar wer", Toast.LENGTH_SHORT).show());
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(R.string.even_wachten);
+        mProgressDialog.setMessage(getString(R.string.laden_gebruikers));
+        mProgressDialog.show();
+    }
+
+    private void initActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
+        }
     }
 
     @Override
@@ -132,6 +137,10 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void setupRecyclerView() {
+        mLeden = new ArrayList<>();
+        mGefilterdeLeden = new ArrayList<>();
+        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
+        mAdapter = new SimpleItemRecyclerViewAdapter(mGefilterdeLeden);
         DatabaseReference ledenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
         Query q = ledenRef.orderByChild("voornaam");
 
@@ -263,6 +272,16 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
          * @param lid Het te selecteren lid
          */
         private void zetActief(Lid lid) {
+            /* als de fab (credit/debit) niet zichtbaar is (= standaard niet, omdat bij aanvang
+             * scherm er niemand gesecteerd is), dan zichtbaar maken + dichtklappen indien opengeklapt
+             */
+            if (mFab.getVisibility() == View.INVISIBLE)
+            {
+                mFab.setVisibility(View.VISIBLE);
+            }
+
+            mFab.close(true);
+
             for(Lid tLid : mGefilterdeLeden)
             {
                 tLid.setActiefInLijst(false);

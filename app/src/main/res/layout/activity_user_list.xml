@@ -45,6 +45,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="@dimen/fab_margin"
+        android:visibility="invisible"
         app:menu_icon="@drawable/ic_menu">
 
         <com.github.clans.fab.FloatingActionButton
@@ -52,7 +53,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_add"
-            fab:fab_label="Menu item 1"
+            fab:fab_label="Bedrag toevoegen"
             fab:fab_size="mini" />
 
         <com.github.clans.fab.FloatingActionButton
@@ -60,7 +61,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/ic_remove"
-            fab:fab_label="Menu item 2"
+            fab:fab_label="Verkoop"
             fab:fab_size="mini" />
 
 
