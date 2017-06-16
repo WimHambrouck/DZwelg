@@ -81,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void signInSucces() {
         Intent main = new Intent(MainActivity.this, EventListActivity.class);
-        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //clear top of the stack, making EventListActivity the first in the backstack
         startActivity(main);
+        finish();
     }
 
     @OnClick(R.id.btnLogin)
@@ -144,8 +144,9 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
                 FirebaseCrash.report(task.getException());
                 String toastMessage = getString(R.string.fout_onbekend);
-                if (task.getException() != null) {
-                    toastMessage = task.getException().getMessage();
+                @SuppressWarnings("ThrowableResultOfMethodCallIgnored") Throwable t = task.getException();
+                if (t != null) {
+                    toastMessage = t.getMessage();
                     FirebaseCrash.report(task.getException());
                 }
                 Toast.makeText(
