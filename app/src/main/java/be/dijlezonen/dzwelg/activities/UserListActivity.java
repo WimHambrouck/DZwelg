@@ -97,7 +97,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
-        mFabCredit.setOnClickListener(v -> Toast.makeText(v.getContext(), "MEER GELD", Toast.LENGTH_SHORT).show());
+        mFabCredit.setOnClickListener(v -> startActivity(new Intent(UserListActivity.this, CreditActivity.class)));
         mFabDebit.setOnClickListener(view -> Toast.makeText(view.getContext(), "SMIJT het maar wer", Toast.LENGTH_SHORT).show());
     }
 
@@ -184,12 +184,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     @Override
     public boolean onQueryTextSubmit(final String query) {
-//        LidComparator lidComparator = new LidComparator();
-//
-//        List<Lid> temp = rLeden.stream()
-//                .filter(x -> Objects.equals(x.getVolledigeNaam(), query))
-//                .collect(Collectors.toCollection(ArrayList::new));
-
         filterLedenLijst(query);
         return false;
     }
@@ -245,7 +239,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 holder.mTxtLidNaam.setTextColor(Color.WHITE);
             }
 
-            holder.mView.setOnClickListener((view) -> {
+            holder.mView.setOnClickListener(view -> {
                 // collapse search view (zodra we op een lid krijgen, mag de filtering weg)
                 // searchView.onActionViewCollapsed();
                 if (mTwoPane) {

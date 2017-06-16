@@ -37,6 +37,9 @@
                 android:name="android.support.PARENT_ACTIVITY"
                 android:value="be.dijlezonen.dzwelg.activities.UserListActivity" />
         </activity>
+        <activity
+            android:name=".activities.CreditActivity"
+            android:label="@string/bedrag_toevoegen" />
     </application>
 
 </manifest>
