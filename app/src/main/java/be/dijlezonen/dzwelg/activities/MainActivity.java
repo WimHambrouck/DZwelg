@@ -144,7 +144,8 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
                 FirebaseCrash.report(task.getException());
                 String toastMessage = getString(R.string.fout_onbekend);
-                @SuppressWarnings("ThrowableResultOfMethodCallIgnored") Throwable t = task.getException();
+                //noinspection ThrowableResultOfMethodCallIgnored
+                Throwable t = task.getException();
                 if (t != null) {
                     toastMessage = t.getMessage();
                     FirebaseCrash.report(task.getException());
