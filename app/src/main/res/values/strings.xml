@@ -17,7 +17,7 @@
     <string name="afmelden">Afmelden</string>
     <string name="title_user_list">Users</string>
     <string name="title_user_detail">User Detail</string>
-    <string name="laden_gebruikers">Bezig met laden van gebruikers…</string>
+    <string name="laden_leden">Bezig met laden van leden…</string>
     <string name="search_hint">Lid</string>
     <string name="zoek_lid">Zoek naar leden</string>
     <string name="kies_credit_bedrag">Kies het bij te laden bedrag:</string>

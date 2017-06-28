@@ -1,5 +1,6 @@
 package be.dijlezonen.dzwelg.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.View;
@@ -18,12 +19,13 @@ public class CreditActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
 
+        Intent myIntent = getIntent();
+        myIntent.getExtras().getString(UserListActivity.EXTRA_LID_ID);
+
         ButterKnife.bind(this);
     }
 
-
-    @OnClick({R.id.btnEen, R.id.btnTwee, R.id.btnVijf, R.id.btnTien, R.id.btnTwintig,
-            R.id.btnVijftig, R.id.btnHonderd, R.id.btnTweehonderd})
+    @OnClick({R.id.btnTien, R.id.btnTwintig, R.id.btnVijftig, R.id.btnHonderd})
     public void creditButtonClicked(View v) {
         laadBedrag(Double.parseDouble(((Button) v).getText().toString()));
     }

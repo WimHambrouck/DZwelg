@@ -50,6 +50,7 @@ import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 public class UserListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private static final String LOG_TAG = UserListActivity.class.getSimpleName();
+    public static final String EXTRA_LID_ID = "LID_ID";
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -58,10 +59,12 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     private ProgressDialog mProgressDialog;
     private RecyclerView mRecyclerView;
-    private SimpleItemRecyclerViewAdapter mAdapter;
+    private LedenRecyclerViewAdapter mAdapter;
 
     private List<Lid> mLeden;
     private List<Lid> mGefilterdeLeden;
+
+    private Lid mActiefLid;
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -97,14 +100,18 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
-        mFabCredit.setOnClickListener(v -> startActivity(new Intent(UserListActivity.this, CreditActivity.class)));
+        mFabCredit.setOnClickListener(v -> {
+            Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
+            creditActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
+            startActivity(creditActivity);
+        });
         mFabDebit.setOnClickListener(view -> Toast.makeText(view.getContext(), "SMIJT het maar wer", Toast.LENGTH_SHORT).show());
     }
 
     private void showProgressDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle(R.string.even_wachten);
-        mProgressDialog.setMessage(getString(R.string.laden_gebruikers));
+        mProgressDialog.setMessage(getString(R.string.laden_leden));
         mProgressDialog.show();
     }
 
@@ -140,7 +147,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mLeden = new ArrayList<>();
         mGefilterdeLeden = new ArrayList<>();
         mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
-        mAdapter = new SimpleItemRecyclerViewAdapter(mGefilterdeLeden);
+        mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
         DatabaseReference ledenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
         Query q = ledenRef.orderByChild("voornaam");
 
@@ -150,7 +157,9 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-                mLeden.add(dataSnapshot.getValue(Lid.class));
+                Lid nieuwLid = dataSnapshot.getValue(Lid.class);
+                nieuwLid.setId(dataSnapshot.getKey());
+                mLeden.add(nieuwLid);
                 mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -158,6 +167,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
                 Lid lid = dataSnapshot.getValue(Lid.class);
+
                 mLeden.set(mLeden.indexOf(lid), lid);
                 mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
@@ -165,7 +175,11 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
             @Override
             public void onChildRemoved(DataSnapshot dataSnapshot) {
-                mLeden.remove(dataSnapshot.getValue(Lid.class));
+                Lid lid = dataSnapshot.getValue(Lid.class);
+                if (lid.equals(mActiefLid)) {
+                    mActiefLid = null;
+                }
+                mLeden.remove(lid);
                 mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
             }
@@ -215,10 +229,10 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         return false;
     }
 
-    private class SimpleItemRecyclerViewAdapter
+    private class LedenRecyclerViewAdapter
             extends RecyclerView.Adapter<UserListActivity.LidViewHolder> {
 
-        SimpleItemRecyclerViewAdapter(List<Lid> leden) {
+        LedenRecyclerViewAdapter(List<Lid> leden) {
 
         }
 
@@ -263,24 +277,25 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         /**
          * Zorgt ervoor dat het lid actief wordt gezet + refresh van adapter zodat we in de view
          * zien dat het desbetreffende lid geslecteerd is.
+         *
          * @param lid Het te selecteren lid
          */
         private void zetActief(Lid lid) {
             /* als de fab (credit/debit) niet zichtbaar is (= standaard niet, omdat bij aanvang
              * scherm er niemand gesecteerd is), dan zichtbaar maken + dichtklappen indien opengeklapt
              */
-            if (mFab.getVisibility() == View.INVISIBLE)
-            {
+            if (mFab.getVisibility() == View.INVISIBLE) {
                 mFab.setVisibility(View.VISIBLE);
             }
 
             mFab.close(true);
 
-            for(Lid tLid : mGefilterdeLeden)
-            {
-                tLid.setActiefInLijst(false);
+            if (mActiefLid != null) {
+                mLeden.get(mLeden.indexOf(mActiefLid)).setActiefInLijst(false);
             }
-            lid.setActiefInLijst(true);
+            mActiefLid = lid;
+            mLeden.get(mLeden.indexOf(mActiefLid)).setActiefInLijst(true);
+
             mRecyclerView.setAdapter(mAdapter);
         }
 

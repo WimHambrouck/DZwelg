@@ -27,33 +27,6 @@
             android:layout_height="match_parent">
 
             <Button
-                android:id="@+id/btnEen"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/_1"
-                android:textSize="90sp"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:id="@+id/btnTwee"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/_2"
-                android:textSize="90sp"
-                tools:ignore="ButtonStyle" />
-
-            <Button
-                android:id="@+id/btnVijf"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/_5"
-                android:textSize="90sp"
-                tools:ignore="ButtonStyle" />
-
-            <Button
                 android:id="@+id/btnTien"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
@@ -61,11 +34,6 @@
                 android:text="@string/_10"
                 android:textSize="90sp"
                 tools:ignore="ButtonStyle" />
-        </TableRow>
-
-        <TableRow
-            android:layout_width="match_parent"
-            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/btnTwintig"
@@ -75,6 +43,13 @@
                 android:text="@string/_20"
                 android:textSize="90sp"
                 tools:ignore="ButtonStyle" />
+
+
+        </TableRow>
+
+        <TableRow
+            android:layout_width="match_parent"
+            android:layout_height="match_parent">
 
             <Button
                 android:id="@+id/btnVijftig"
@@ -94,14 +69,6 @@
                 android:textSize="90sp"
                 tools:ignore="ButtonStyle" />
 
-            <Button
-                android:id="@+id/btnTweehonderd"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_weight="1"
-                android:text="@string/_200"
-                android:textSize="90sp"
-                tools:ignore="ButtonStyle" />
         </TableRow>
 
         <TableRow
