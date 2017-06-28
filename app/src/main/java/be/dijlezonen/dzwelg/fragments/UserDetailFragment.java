@@ -74,8 +74,11 @@ public class UserDetailFragment extends Fragment {
 
         if (getArguments().containsKey(ARG_ITEM_ID)) {
             setUpAppBar();
-            mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(getArguments().getString(ARG_ITEM_ID));
-            mLedenRef.addValueEventListener(lidListener);
+            String eventId = getArguments().getString(ARG_ITEM_ID);
+            if (eventId != null) {
+                mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(eventId);
+                mLedenRef.addValueEventListener(lidListener);
+            }
         }
     }
 

@@ -104,7 +104,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private void showProgressDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle(R.string.even_wachten);
-        mProgressDialog.setMessage(getString(R.string.laden_gebruikers));
+        mProgressDialog.setMessage(getString(R.string.laden_leden));
         mProgressDialog.show();
     }
 
@@ -150,7 +150,9 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
-                mLeden.add(dataSnapshot.getValue(Lid.class));
+                Lid nieuwLid = dataSnapshot.getValue(Lid.class);
+                nieuwLid.setId(dataSnapshot.getKey());
+                mLeden.add(nieuwLid);
                 mGefilterdeLeden = mLeden;
                 mRecyclerView.setAdapter(mAdapter);
             }
