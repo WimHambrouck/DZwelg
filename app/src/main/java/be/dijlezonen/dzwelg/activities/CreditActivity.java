@@ -22,8 +22,7 @@ public class CreditActivity extends AppCompatActivity {
     }
 
 
-    @OnClick({R.id.btnEen, R.id.btnTwee, R.id.btnVijf, R.id.btnTien, R.id.btnTwintig,
-            R.id.btnVijftig, R.id.btnHonderd, R.id.btnTweehonderd})
+    @OnClick({R.id.btnTien, R.id.btnTwintig, R.id.btnVijftig, R.id.btnHonderd})
     public void creditButtonClicked(View v) {
         laadBedrag(Double.parseDouble(((Button) v).getText().toString()));
     }
