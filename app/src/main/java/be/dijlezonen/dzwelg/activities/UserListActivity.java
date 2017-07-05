@@ -65,6 +65,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private List<Lid> mGefilterdeLeden;
 
     private Lid mActiefLid;
+    private ChildEventListener mLedenEventListener;
+
 
     @BindView(R.id.search_view)
     SearchView searchView;
@@ -86,6 +88,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         initActionBar();
         showProgressDialog();
+        setupLedenEventListener();
         setupRecyclerView();
 
         if (findViewById(R.id.user_detail_container) != null) {
@@ -104,54 +107,13 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
             creditActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
             startActivity(creditActivity);
+            mFab.close(false);
         });
         mFabDebit.setOnClickListener(view -> Toast.makeText(view.getContext(), "SMIJT het maar wer", Toast.LENGTH_SHORT).show());
     }
 
-    private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setTitle(R.string.even_wachten);
-        mProgressDialog.setMessage(getString(R.string.laden_leden));
-        mProgressDialog.show();
-    }
-
-    private void initActionBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpFromSameTask(this);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void setupRecyclerView() {
-        mLeden = new ArrayList<>();
-        mGefilterdeLeden = new ArrayList<>();
-        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
-        mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
-        DatabaseReference ledenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
-        Query q = ledenRef.orderByChild("voornaam");
-
-        q.addChildEventListener(new ChildEventListener() {
+    private void setupLedenEventListener() {
+        mLedenEventListener = new ChildEventListener() {
             @Override
             public void onChildAdded(DataSnapshot dataSnapshot, String s) {
                 if (mProgressDialog.isShowing()) {
@@ -193,7 +155,62 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             public void onCancelled(DatabaseError databaseError) {
                 Log.e(LOG_TAG, databaseError.getMessage());
             }
-        });
+        };
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        if (mActiefLid != null) {
+            //als niet null komen we terug van een credit of debit en moet lid terug actief gezet in de lijst
+            mLeden.get(mLeden.indexOf(mActiefLid)).setActiefInLijst(true);
+        }
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(R.string.even_wachten);
+        mProgressDialog.setMessage(getString(R.string.laden_leden));
+        mProgressDialog.show();
+    }
+
+    private void initActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
+        }
+    }
+
+
+    private void setupRecyclerView() {
+        mLeden = new ArrayList<>();
+        mGefilterdeLeden = new ArrayList<>();
+        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
+        mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
+        DatabaseReference mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
+        Query q = mLedenRef.orderByChild("voornaam");
+        q.addChildEventListener(mLedenEventListener);
     }
 
     @Override
@@ -255,7 +272,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
             holder.mView.setOnClickListener(view -> {
                 // collapse search view (zodra we op een lid krijgen, mag de filtering weg)
-                // searchView.onActionViewCollapsed();
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
                     arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
