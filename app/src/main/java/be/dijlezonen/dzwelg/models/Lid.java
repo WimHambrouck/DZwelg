@@ -40,6 +40,8 @@ public class Lid {
     public void updateSaldo(double saldo) throws BedragException {
         if (saldo < 0) {
             throw new BedragException("Op te laden bedrag mag niet negatief zijn!");
+        } else if (saldo < 10) {
+            throw new BedragException("Op te laden bedrag mag niet kleiner dan €10 zijn!");
         } else {
             this.saldo += saldo;
         }
