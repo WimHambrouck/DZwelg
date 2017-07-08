@@ -16,7 +16,6 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
@@ -31,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.VerkoopActivity;
 import be.dijlezonen.dzwelg.fragments.UserDetailFragment;
 import be.dijlezonen.dzwelg.models.Lid;
 import butterknife.BindView;
@@ -103,13 +103,19 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
+
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
             creditActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
             startActivity(creditActivity);
             mFab.close(false);
         });
-        mFabDebit.setOnClickListener(view -> Toast.makeText(view.getContext(), "SMIJT het maar wer", Toast.LENGTH_SHORT).show());
+
+        mFabDebit.setOnClickListener(view -> {
+            Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
+            verkoopActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
+            startActivity(verkoopActivity);
+        });
     }
 
     private void setupLedenEventListener() {

@@ -35,4 +35,6 @@
     <string name="hoe_veel_bijladen">Hoe veel wil je bijladen?</string>
     <string name="invoeren_groot_bedrag">Ben je zeker dat je zo\'n groot bedrag (€ %1$.2f) wilt invoeren?</string>
     <string name="zeker">Zeker?</string>
+    <string name="item_verwijderen">item verwijderen</string>
+    <string name="_0">0</string>
 </resources>
