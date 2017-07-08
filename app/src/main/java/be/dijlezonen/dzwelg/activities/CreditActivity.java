@@ -1,5 +1,6 @@
 package be.dijlezonen.dzwelg.activities;
 
+import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AlertDialog;
@@ -18,12 +19,13 @@ import com.google.firebase.database.ValueEventListener;
 
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.exceptions.BedragException;
+import be.dijlezonen.dzwelg.fragments.EigenBedragDialogFragment;
 import be.dijlezonen.dzwelg.models.Lid;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
-public class CreditActivity extends AppCompatActivity {
+public class CreditActivity extends AppCompatActivity implements EigenBedragDialogFragment.EigenBedragDialogListener {
 
     private static final String LOG_TAG = CreditActivity.class.getSimpleName();
     private Lid mLid;
@@ -64,15 +66,41 @@ public class CreditActivity extends AppCompatActivity {
         laadBedrag(Double.parseDouble(((Button) v).getText().toString()));
     }
 
+    @OnClick(R.id.btnEigenBedrag)
+    public void eigenBedrag() {
+        DialogFragment dialog = new EigenBedragDialogFragment();
+        dialog.show(getFragmentManager(), "Wat is fragment?");
+    }
+
     private void laadBedrag(double bedrag) {
-        try {
-            mLid.updateSaldo(bedrag);
-            mLidRef.child("saldo").setValue(mLid.getSaldo());
-            finish();
-        } catch (BedragException e) {
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-            builder.setTitle("Fout!")
-                    .setMessage(e.getMessage());
+        laadBedrag(bedrag, false);
+    }
+
+    private void laadBedrag(double bedrag, boolean override) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+
+        if (!override && bedrag > 100) {
+            builder.setTitle(R.string.zeker)
+                    .setMessage(String.format(getString(R.string.invoeren_groot_bedrag), bedrag))
+                    .setPositiveButton(android.R.string.yes, ((dialog, which) -> laadBedrag(bedrag, true)))
+                    .setNegativeButton(android.R.string.no, ((dialog, which) -> dialog.dismiss()))
+                    .create().show();
+        } else {
+            try {
+                mLid.updateSaldo(bedrag);
+                mLidRef.child("saldo").setValue(mLid.getSaldo());
+                finish();
+            } catch (BedragException e) {
+                builder.setTitle("Fout!")
+                        .setMessage(e.getMessage())
+                        .setNeutralButton(android.R.string.ok, (dialog, which) -> dialog.dismiss());
+                builder.create().show();
+            }
         }
+    }
+
+    @Override
+    public void onDialogPositiveClick(EigenBedragDialogFragment dialog) {
+        laadBedrag(dialog.getIngevoerdBedrag());
     }
 }

@@ -32,4 +32,7 @@
     <string name="_100">100</string>
     <string name="_200">200</string>
     <string name="eigen_bedrag_ingeven">Eigen bedrag ingeven</string>
+    <string name="hoe_veel_bijladen">Hoe veel wil je bijladen?</string>
+    <string name="invoeren_groot_bedrag">Ben je zeker dat je zo\'n groot bedrag (€ %1$.2f) wilt invoeren?</string>
+    <string name="zeker">Zeker?</string>
 </resources>

@@ -37,8 +37,6 @@
                 android:text="@string/_20"
                 android:textSize="90sp"
                 tools:ignore="ButtonStyle" />
-
-
         </TableRow>
 
         <TableRow
