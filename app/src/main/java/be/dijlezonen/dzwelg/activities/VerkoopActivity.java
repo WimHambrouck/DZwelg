@@ -21,7 +21,7 @@ public class VerkoopActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verkoop);
 
-        DatabaseReference consumptieRef = FirebaseDatabase.getInstance().getReference("consumpties");
+        DatabaseReference consumptieRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_consumpties));
 
         FirebaseRecyclerAdapter<Consumptie, ConsumptieRecyclerAdapter.ConsumptieViewHolder> firebaseRecyclerAdapter =
                 new ConsumptieRecyclerAdapter(
