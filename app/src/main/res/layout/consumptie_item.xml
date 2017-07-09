@@ -6,24 +6,24 @@
     android:orientation="horizontal">
 
     <TextView
-        android:layout_centerInParent="true"
         android:id="@+id/txt_consumptie_naam"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        android:layout_centerInParent="true"
         android:layout_toStartOf="@+id/ll_aantal"
         android:labelFor="@+id/edit_hoeveelheid"
         android:textSize="32sp"
         tools:text="Fanta" />
 
     <LinearLayout
-        android:layout_centerInParent="true"
         android:id="@+id/ll_aantal"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_alignParentEnd="true">
+        android:layout_alignParentEnd="true"
+        android:layout_centerInParent="true">
 
         <ImageButton
-            android:id="@+id/img_min"
+            android:id="@+id/btn_min"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -36,14 +36,15 @@
             android:id="@+id/edit_hoeveelheid"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:inputType="number"
-            android:text="@string/_0"
-            android:textSize="32sp"
+            android:layout_marginEnd="10dp"
             android:layout_marginStart="10dp"
-            android:layout_marginEnd="10dp" />
+            android:inputType="number"
+            android:selectAllOnFocus="true"
+            android:text="@string/_0"
+            android:textSize="32sp" />
 
         <ImageButton
-            android:id="@+id/img_plus"
+            android:id="@+id/btn_plus"
             android:layout_width="32dp"
             android:layout_height="match_parent"
             android:layout_gravity="center"
@@ -53,12 +54,12 @@
             android:src="@drawable/ic_add_circle" />
 
         <TextView
-            android:layout_marginStart="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:textColor="@color/colorPrimaryDark"
             android:textSize="32sp"
-            tools:text="€1,00"
-            android:textColor="@color/colorPrimaryDark" />
+            tools:text="€1,00" />
     </LinearLayout>
 
 
