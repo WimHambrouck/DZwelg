@@ -56,14 +56,11 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuth = FirebaseAuth.getInstance();
 
         //listen to firebase authorisation state to check when user is logged in
-        mFirebaseAuthStateListener = new FirebaseAuth.AuthStateListener() {
-            @Override
-            public void onAuthStateChanged(@NonNull FirebaseAuth firebaseAuth) {
-                FirebaseUser user = firebaseAuth.getCurrentUser();
-                if (user != null) {
-                    // user is signed in, start EventListActivity
-                    signInSucces();
-                }
+        mFirebaseAuthStateListener = firebaseAuth -> {
+            FirebaseUser user = firebaseAuth.getCurrentUser();
+            if (user != null) {
+                // user is signed in, start EventListActivity
+                signInSucces();
             }
         };
     }
@@ -84,8 +81,8 @@ public class MainActivity extends AppCompatActivity {
 
     private void signInSucces() {
         Intent main = new Intent(MainActivity.this, EventListActivity.class);
-        main.addFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);  //clear top of the stack, making EventListActivity the first in the backstack
         startActivity(main);
+        finish();
     }
 
     @OnClick(R.id.btnLogin)
@@ -147,8 +144,10 @@ public class MainActivity extends AppCompatActivity {
                 FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
                 FirebaseCrash.report(task.getException());
                 String toastMessage = getString(R.string.fout_onbekend);
-                if (task.getException() != null) {
-                    toastMessage = task.getException().getMessage();
+                //noinspection ThrowableResultOfMethodCallIgnored
+                Throwable t = task.getException();
+                if (t != null) {
+                    toastMessage = t.getMessage();
                     FirebaseCrash.report(task.getException());
                 }
                 Toast.makeText(

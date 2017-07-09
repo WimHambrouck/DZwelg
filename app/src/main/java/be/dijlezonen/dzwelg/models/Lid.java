@@ -4,6 +4,8 @@ import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.Locale;
 
+import be.dijlezonen.dzwelg.exceptions.BedragException;
+
 public class Lid {
     private String id;
     private String voornaam;
@@ -35,8 +37,14 @@ public class Lid {
         return saldo;
     }
 
-    public void setSaldo(double saldo) {
-        this.saldo = saldo;
+    public void updateSaldo(double saldo) throws BedragException {
+        if (saldo < 0) {
+            throw new BedragException("Op te laden bedrag mag niet negatief zijn!");
+        } else if (saldo < 10) {
+            throw new BedragException("Op te laden bedrag mag niet kleiner zijn dan €10!");
+        } else {
+            this.saldo += saldo;
+        }
     }
 
     public String getId() {

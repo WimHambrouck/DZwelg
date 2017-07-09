@@ -49,13 +49,10 @@ public class EventListActivity extends AppCompatActivity {
                 }
                 TextView txtTitel = ButterKnife.findById(v, R.id.txt_event_titel);
                 txtTitel.setText(model.getTitel());
-                v.setOnClickListener(new View.OnClickListener() {
-                    @Override
-                    public void onClick(View view) {
-                        Intent intent = new Intent(EventListActivity.this, UserListActivity.class);
-                        intent.putExtra(getString(R.string.extra_event_title), model.getTitel());
-                        startActivity(intent);
-                    }
+                v.setOnClickListener(view -> {
+                    Intent intent = new Intent(EventListActivity.this, UserListActivity.class);
+                    intent.putExtra(getString(R.string.extra_event_title), model.getTitel());
+                    startActivity(intent);
                 });
             }
         };
@@ -74,6 +71,7 @@ public class EventListActivity extends AppCompatActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_afmelden) {
             FirebaseAuth.getInstance().signOut();
+            startActivity(new Intent(this, MainActivity.class));
             finish();
             return true;
         } else {

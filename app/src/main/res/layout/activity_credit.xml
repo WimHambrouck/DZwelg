@@ -11,12 +11,6 @@
 
     tools:context="be.dijlezonen.dzwelg.activities.CreditActivity">
 
-    <TextView
-        style="@style/Base.TextAppearance.AppCompat.Large"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/kies_credit_bedrag" />
-
     <TableLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent">
@@ -43,8 +37,6 @@
                 android:text="@string/_20"
                 android:textSize="90sp"
                 tools:ignore="ButtonStyle" />
-
-
         </TableRow>
 
         <TableRow
@@ -84,5 +76,11 @@
                 android:textSize="45sp" />
         </TableRow>
     </TableLayout>
+
+    <TextView
+        style="@style/Base.TextAppearance.AppCompat.Large"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="@string/kies_credit_bedrag" />
 
 </LinearLayout>
