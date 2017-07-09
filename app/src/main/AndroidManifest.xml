@@ -40,7 +40,7 @@
         <activity
             android:name=".activities.CreditActivity"
             android:label="@string/bedrag_toevoegen" />
-        <activity android:name=".VerkoopActivity"></activity>
+        <activity android:name=".activities.VerkoopActivity"></activity>
     </application>
 
 </manifest>

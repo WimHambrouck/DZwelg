@@ -30,7 +30,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import be.dijlezonen.dzwelg.R;
-import be.dijlezonen.dzwelg.VerkoopActivity;
 import be.dijlezonen.dzwelg.fragments.UserDetailFragment;
 import be.dijlezonen.dzwelg.models.Lid;
 import butterknife.BindView;
