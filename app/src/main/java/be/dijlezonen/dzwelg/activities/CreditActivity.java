@@ -40,7 +40,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
         String lidId = myIntent.getExtras().getString(UserListActivity.EXTRA_LID_ID);
 
         if (lidId != null) {
-            mLidRef = FirebaseDatabase.getInstance().getReference("leden").child(lidId);
+            mLidRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(lidId);
 
             mLidRef.addListenerForSingleValueEvent(new ValueEventListener() {
                 @Override
