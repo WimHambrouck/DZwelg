@@ -9,8 +9,8 @@ import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
-import be.dijlezonen.dzwelg.ConsumptieRecyclerAdapter;
 import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.adapters.ConsumptieRecyclerAdapter;
 import be.dijlezonen.dzwelg.models.Consumptie;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")

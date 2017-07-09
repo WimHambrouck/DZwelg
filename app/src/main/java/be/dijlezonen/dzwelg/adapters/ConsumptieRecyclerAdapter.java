@@ -1,4 +1,4 @@
-package be.dijlezonen.dzwelg;
+package be.dijlezonen.dzwelg.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.View;
@@ -9,6 +9,7 @@ import android.widget.TextView;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
+import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.models.Consumptie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
