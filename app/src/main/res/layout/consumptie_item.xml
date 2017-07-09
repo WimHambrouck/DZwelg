@@ -40,8 +40,8 @@
             android:layout_marginStart="10dp"
             android:inputType="number"
             android:selectAllOnFocus="true"
-            android:text="@string/_0"
-            android:textSize="32sp" />
+            android:textSize="32sp"
+            tools:text="@string/_0" />
 
         <ImageButton
             android:id="@+id/btn_plus"

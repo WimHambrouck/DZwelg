@@ -12,6 +12,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.adapters.ConsumptieRecyclerAdapter;
 import be.dijlezonen.dzwelg.models.Consumptie;
+import be.dijlezonen.dzwelg.models.ConsumptieViewHolder;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
 public class VerkoopActivity extends AppCompatActivity {
@@ -23,11 +24,11 @@ public class VerkoopActivity extends AppCompatActivity {
 
         DatabaseReference consumptieRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_consumpties));
 
-        FirebaseRecyclerAdapter<Consumptie, ConsumptieRecyclerAdapter.ConsumptieViewHolder> firebaseRecyclerAdapter =
+        FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> firebaseRecyclerAdapter =
                 new ConsumptieRecyclerAdapter(
                         Consumptie.class,
                         R.layout.consumptie_item,
-                        ConsumptieRecyclerAdapter.ConsumptieViewHolder.class,
+                        ConsumptieViewHolder.class,
                         consumptieRef
                 );
 
@@ -36,6 +37,4 @@ public class VerkoopActivity extends AppCompatActivity {
         consumptiesRecyclerView.setLayoutManager(llm);
         consumptiesRecyclerView.setAdapter(firebaseRecyclerAdapter);
     }
-
-
 }

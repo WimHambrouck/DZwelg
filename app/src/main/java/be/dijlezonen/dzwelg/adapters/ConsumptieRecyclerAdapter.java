@@ -1,20 +1,20 @@
 package be.dijlezonen.dzwelg.adapters;
 
-import android.support.v7.widget.RecyclerView;
-import android.view.View;
-import android.widget.EditText;
-import android.widget.ImageButton;
-import android.widget.TextView;
+import android.text.Editable;
+import android.text.TextWatcher;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
-import be.dijlezonen.dzwelg.R;
-import be.dijlezonen.dzwelg.models.Consumptie;
-import butterknife.BindView;
-import butterknife.ButterKnife;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 
-public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumptie, ConsumptieRecyclerAdapter.ConsumptieViewHolder> {
+import be.dijlezonen.dzwelg.models.Consumptie;
+import be.dijlezonen.dzwelg.models.ConsumptieViewHolder;
+import be.dijlezonen.dzwelg.models.Consumptielijn;
+
+public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> {
     /**
      * @param modelClass      Firebase will marshall the data at a location into an instance of a class that you provide
      * @param modelLayout     This is the layout used to represent a single item in the list. You will be responsible for populating an
@@ -25,34 +25,55 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
      */
     public ConsumptieRecyclerAdapter(Class<Consumptie> modelClass, int modelLayout, Class<ConsumptieViewHolder> viewHolderClass, Query ref) {
         super(modelClass, modelLayout, viewHolderClass, ref);
+        consumptielijnen = new ArrayList<>();
     }
+
+    private List<Consumptielijn> consumptielijnen;
 
     @Override
     protected void populateViewHolder(ConsumptieViewHolder viewHolder, Consumptie model, int position) {
+        consumptielijnen.add(position, new Consumptielijn(model, 0));
+
         viewHolder.txtConsumptieNaam.setText(model.getNaam());
+
+        viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", consumptielijnen.get(position).getAantal()));
+        viewHolder.editHoeveelheid.addTextChangedListener(new HoeveelheidWatcher(position));
+
+
+        viewHolder.btnPlus.setOnClickListener(v -> {
+            int aantal = Integer.parseInt(viewHolder.editHoeveelheid.getText().toString());
+            viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", ++aantal));
+        });
+
+        viewHolder.btnMin.setOnClickListener(v -> {
+            int aantal = Integer.parseInt(viewHolder.editHoeveelheid.getText().toString());
+            if (aantal > 0)
+                viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", --aantal));
+        });
+
     }
 
-    public static class ConsumptieViewHolder extends RecyclerView.ViewHolder {
+    private class HoeveelheidWatcher implements TextWatcher {
 
-        @BindView(R.id.txt_consumptie_naam)
-        TextView txtConsumptieNaam;
-        @BindView(R.id.edit_hoeveelheid)
-        EditText editHoeveelheid;
-        @BindView(R.id.btn_min)
-        ImageButton btnMin;
-        @BindView(R.id.btn_plus)
-        ImageButton btnPlus;
+        private int position;
 
-        private View view;
-
-        public ConsumptieViewHolder(View itemView) {
-            super(itemView);
-            this.view = itemView;
-            ButterKnife.bind(this, itemView);
+        HoeveelheidWatcher(int position) {
+            this.position = position;
         }
 
-        public View getView() {
-            return view;
+        @Override
+        public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+            //niet gebruikt
+        }
+
+        @Override
+        public void onTextChanged(CharSequence s, int start, int before, int count) {
+            //niet gebruikt
+        }
+
+        @Override
+        public void afterTextChanged(Editable s) {
+            consumptielijnen.get(position).setAantal(Integer.parseInt(s.toString()));
         }
     }
 }
