@@ -16,6 +16,8 @@ public class ConsumptieViewHolder extends RecyclerView.ViewHolder {
     public TextView txtConsumptieNaam;
     @BindView(R.id.edit_hoeveelheid)
     public EditText editHoeveelheid;
+    @BindView(R.id.txt_subtotaal)
+    public TextView txtSubtotaal;
     @BindView(R.id.btn_min)
     public ImageButton btnMin;
     @BindView(R.id.btn_plus)

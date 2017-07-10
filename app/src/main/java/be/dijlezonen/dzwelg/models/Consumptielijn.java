@@ -16,4 +16,8 @@ public class Consumptielijn {
     public void setAantal(int aantal) {
         this.aantal = aantal;
     }
+
+    public Consumptie getConsumptie() {
+        return consumptie;
+    }
 }

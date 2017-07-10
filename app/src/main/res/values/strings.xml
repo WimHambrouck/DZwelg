@@ -37,4 +37,5 @@
     <string name="zeker">Zeker?</string>
     <string name="item_verwijderen">item verwijderen</string>
     <string name="_0">0</string>
+    <string name="nul_euro">0,00 €</string>
 </resources>
