@@ -19,6 +19,8 @@ import be.dijlezonen.dzwelg.models.Consumptielijn;
 public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> {
 
     private NumberFormat numberFormatter;
+    private List<Consumptielijn> consumptielijnen;
+    private ConsumptieRecyclerAdapterCallback callback;
 
     /**
      * @param modelClass      Firebase will marshall the data at a location into an instance of a class that you provide
@@ -28,14 +30,13 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
      * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location, using some
      *                        combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
      */
-    public ConsumptieRecyclerAdapter(Class<Consumptie> modelClass, int modelLayout, Class<ConsumptieViewHolder> viewHolderClass, Query ref) {
+    public ConsumptieRecyclerAdapter(Class<Consumptie> modelClass, int modelLayout, Class<ConsumptieViewHolder> viewHolderClass, Query ref, ConsumptieRecyclerAdapterCallback callback) {
         super(modelClass, modelLayout, viewHolderClass, ref);
+        this.callback = callback;
         consumptielijnen = new ArrayList<>();
         numberFormatter = NumberFormat.getCurrencyInstance();
         numberFormatter.setCurrency(Currency.getInstance("EUR"));
     }
-
-    private List<Consumptielijn> consumptielijnen;
 
     @Override
     protected void populateViewHolder(ConsumptieViewHolder viewHolder, Consumptie model, int position) {
@@ -57,6 +58,7 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
                 viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", --aantal));
             }
         });
+
     }
 
     private class HoeveelheidWatcher implements TextWatcher {
@@ -85,6 +87,11 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
             Consumptielijn consumptielijn = consumptielijnen.get(position);
             consumptielijn.setAantal(aantal);
             consumptieViewHolder.txtSubtotaal.setText(numberFormatter.format(aantal * consumptielijn.getConsumptie().getPrijs()));
+            callback.updateTotaal(50);
         }
+    }
+
+    public interface ConsumptieRecyclerAdapterCallback {
+        void updateTotaal(int bedrag);
     }
 }

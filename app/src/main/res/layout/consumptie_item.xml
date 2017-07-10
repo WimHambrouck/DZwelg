@@ -63,5 +63,4 @@
             android:text="@string/nul_euro" />
     </LinearLayout>
 
-
 </RelativeLayout>
