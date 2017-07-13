@@ -51,7 +51,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                         R.layout.consumptie_item,
                         ConsumptieViewHolder.class,
                         consumptieRef,
-                        this //voor callback naar updateTotaal
+                        this //voor callback methodes
                 );
 
         LinearLayoutManager llm = new LinearLayoutManager(this);

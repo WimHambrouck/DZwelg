@@ -50,6 +50,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     private static final String LOG_TAG = UserListActivity.class.getSimpleName();
     public static final String EXTRA_LID_ID = "LID_ID";
+
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
      * device.
@@ -117,6 +118,88 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         });
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        if (id == android.R.id.home) {
+            // This ID represents the Home or Up button. In the case of this
+            // activity, the Up button is shown. Use NavUtils to allow users
+            // to navigate up one level in the application structure. For
+            // more details, see the Navigation pattern on Android Design:
+            //
+            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
+            //
+            navigateUpFromSameTask(this);
+            return true;
+        }
+        return super.onOptionsItemSelected(item);
+    }
+
+
+
+    @Override
+    public boolean onQueryTextSubmit(final String query) {
+        filterLedenLijst(query);
+        return false;
+    }
+
+    @Override
+    public boolean onQueryTextChange(String newText) {
+        Log.v(LOG_TAG, "Query changed: " + newText);
+        filterLedenLijst(newText);
+        return true;
+    }
+
+    @Override
+    public boolean onClose() {
+        Log.d(LOG_TAG, "search closed");
+        mGefilterdeLeden = mLeden;
+        return false;
+    }
+
+    private void filterLedenLijst(String query) {
+        ArrayList<Lid> tempLijst = new ArrayList<>();
+
+        for (Lid lid : mLeden) {
+            if (lid.getVolledigeNaam().toLowerCase().contains(query.toLowerCase())) {
+                tempLijst.add(lid);
+            }
+        }
+
+        mGefilterdeLeden = tempLijst;
+        mRecyclerView.setAdapter(mAdapter);
+    }
+
+
+    private void showProgressDialog() {
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setTitle(R.string.even_wachten);
+        mProgressDialog.setMessage(getString(R.string.laden_leden));
+        mProgressDialog.show();
+    }
+
+    private void initActionBar() {
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
+        }
+    }
+
+
+    private void setupRecyclerView() {
+        mLeden = new ArrayList<>();
+        mGefilterdeLeden = new ArrayList<>();
+        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
+        mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
+        DatabaseReference mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
+        Query q = mLedenRef.orderByChild("voornaam");
+        q.addChildEventListener(mLedenEventListener);
+    }
+
     private void setupLedenEventListener() {
         mLedenEventListener = new ChildEventListener() {
             @Override
@@ -161,94 +244,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 Log.e(LOG_TAG, databaseError.getMessage());
             }
         };
-    }
-
-    @Override
-    protected void onResume() {
-        super.onResume();
-        if (mActiefLid != null) {
-            //als niet null komen we terug van een credit of debit en moet lid terug actief gezet in de lijst
-            mLeden.get(mLeden.indexOf(mActiefLid)).setActiefInLijst(true);
-        }
-    }
-
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int id = item.getItemId();
-        if (id == android.R.id.home) {
-            // This ID represents the Home or Up button. In the case of this
-            // activity, the Up button is shown. Use NavUtils to allow users
-            // to navigate up one level in the application structure. For
-            // more details, see the Navigation pattern on Android Design:
-            //
-            // http://developer.android.com/design/patterns/navigation.html#up-vs-back
-            //
-            navigateUpFromSameTask(this);
-            return true;
-        }
-        return super.onOptionsItemSelected(item);
-    }
-
-    private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setTitle(R.string.even_wachten);
-        mProgressDialog.setMessage(getString(R.string.laden_leden));
-        mProgressDialog.show();
-    }
-
-    private void initActionBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
-        }
-    }
-
-
-    private void setupRecyclerView() {
-        mLeden = new ArrayList<>();
-        mGefilterdeLeden = new ArrayList<>();
-        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
-        mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
-        DatabaseReference mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
-        Query q = mLedenRef.orderByChild("voornaam");
-        q.addChildEventListener(mLedenEventListener);
-    }
-
-    @Override
-    public boolean onQueryTextSubmit(final String query) {
-        filterLedenLijst(query);
-        return false;
-    }
-
-    @Override
-    public boolean onQueryTextChange(String newText) {
-        Log.v(LOG_TAG, "Query changed: " + newText);
-        filterLedenLijst(newText);
-        return true;
-    }
-
-    private void filterLedenLijst(String query) {
-        ArrayList<Lid> tempLijst = new ArrayList<>();
-
-        for (Lid lid : mLeden) {
-            if (lid.getVolledigeNaam().toLowerCase().contains(query.toLowerCase())) {
-                tempLijst.add(lid);
-            }
-        }
-
-        mGefilterdeLeden = tempLijst;
-        mRecyclerView.setAdapter(mAdapter);
-    }
-
-    @Override
-    public boolean onClose() {
-        Log.d(LOG_TAG, "search closed");
-        mGefilterdeLeden = mLeden;
-        return false;
     }
 
     private class LedenRecyclerViewAdapter
