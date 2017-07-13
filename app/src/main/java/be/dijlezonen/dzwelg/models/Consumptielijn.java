@@ -4,9 +4,9 @@ public class Consumptielijn {
     private Consumptie consumptie;
     private int aantal;
 
-    public Consumptielijn(Consumptie consumptie, int aantal) {
+    public Consumptielijn(Consumptie consumptie) {
         this.consumptie = consumptie;
-        this.aantal = aantal;
+        this.aantal = 0;
     }
 
     public Integer getAantal() {
