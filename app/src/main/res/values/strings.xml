@@ -39,4 +39,5 @@
     <string name="_0">0</string>
     <string name="nul_euro">0,00 €</string>
     <string name="afrekenen">Afrekenen</string>
+    <string name="totaal">Totaal:</string>
 </resources>

@@ -17,25 +17,28 @@
 
     <LinearLayout
         android:id="@+id/ll_bottom"
-        android:gravity="end"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_alignParentBottom="true"
+        android:gravity="end"
         android:orientation="horizontal">
-
-        <Button
-            android:id="@+id/btn_afrekenen"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="@string/afrekenen" />
 
         <TextView
             android:id="@+id/txt_totaal"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingEnd="10dp"
+            android:paddingStart="10dp"
+            android:text="@string/totaal"
+            android:textSize="32sp" />
+
+        <TextView
+            android:id="@+id/txt_totaalbedrag"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
             android:text="@string/nul_euro"
             android:textColor="@color/colorPrimaryDark"
-            android:textSize="32sp"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content" />
+            android:textSize="32sp" />
 
     </LinearLayout>
 

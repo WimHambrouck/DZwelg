@@ -9,8 +9,6 @@ import android.view.inputmethod.InputMethodManager;
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.Query;
 
-import java.text.NumberFormat;
-import java.util.Currency;
 import java.util.Locale;
 
 import be.dijlezonen.dzwelg.models.Consumptie;
@@ -19,7 +17,6 @@ import be.dijlezonen.dzwelg.models.ConsumptieViewHolder;
 public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> {
 
     private static final int MAX_BESTELAANTAL = 100;
-    private NumberFormat numberFormatter;
     private ConsumptieRecyclerAdapterCallback callback;
 
     /**
@@ -33,8 +30,6 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
     public ConsumptieRecyclerAdapter(Class<Consumptie> modelClass, int modelLayout, Class<ConsumptieViewHolder> viewHolderClass, Query ref, ConsumptieRecyclerAdapterCallback callback) {
         super(modelClass, modelLayout, viewHolderClass, ref);
         this.callback = callback;
-        numberFormatter = NumberFormat.getCurrencyInstance();
-        numberFormatter.setCurrency(Currency.getInstance("EUR"));
     }
 
     @Override
@@ -92,11 +87,19 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
 
         @Override
         public void afterTextChanged(Editable s) {
-            int aantal = Integer.parseInt(s.toString());
+            int aantal = 0;
+
+            try {
+                aantal = Integer.parseInt(s.toString());
+            } catch (NumberFormatException e) {
+                //als het
+                consumptieViewHolder.editHoeveelheid.setText("0");
+            }
+
             if (aantal > MAX_BESTELAANTAL) {
                 consumptieViewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", MAX_BESTELAANTAL));
             } else {
-                consumptieViewHolder.txtSubtotaal.setText(numberFormatter.format(callback.updateAantal(position, aantal)));
+                consumptieViewHolder.txtSubtotaal.setText(callback.updateAantal(position, aantal));
             }
         }
     }
@@ -118,6 +121,6 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
          * @param aantal  Nieuw aantal van deze consumptie
          * @return Prijs van de consumptie * aantal
          */
-        double updateAantal(int positie, int aantal);
+        String updateAantal(int positie, int aantal);
     }
 }
