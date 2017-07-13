@@ -18,6 +18,7 @@ import be.dijlezonen.dzwelg.models.Consumptielijn;
 
 public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> {
 
+    private static final int MAX_BESTELAANTAL = 100;
     private NumberFormat numberFormatter;
     private List<Consumptielijn> consumptielijnen;
     private ConsumptieRecyclerAdapterCallback callback;
@@ -49,7 +50,9 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
 
         viewHolder.btnPlus.setOnClickListener(v -> {
             int aantal = Integer.parseInt(viewHolder.editHoeveelheid.getText().toString());
-            viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", ++aantal));
+            if (aantal < MAX_BESTELAANTAL) {
+                viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", ++aantal));
+            }
         });
 
         viewHolder.btnMin.setOnClickListener(v -> {
@@ -84,10 +87,14 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
         @Override
         public void afterTextChanged(Editable s) {
             int aantal = Integer.parseInt(s.toString());
-            Consumptielijn consumptielijn = consumptielijnen.get(position);
-            consumptielijn.setAantal(aantal);
-            consumptieViewHolder.txtSubtotaal.setText(numberFormatter.format(aantal * consumptielijn.getConsumptie().getPrijs()));
-            callback.updateTotaal(50);
+            if (aantal > MAX_BESTELAANTAL) {
+                consumptieViewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", MAX_BESTELAANTAL));
+            } else {
+                Consumptielijn consumptielijn = consumptielijnen.get(position);
+                consumptielijn.setAantal(aantal);
+                consumptieViewHolder.txtSubtotaal.setText(numberFormatter.format(aantal * consumptielijn.getConsumptie().getPrijs()));
+                callback.updateTotaal(50);
+            }
         }
     }
 
