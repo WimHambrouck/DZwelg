@@ -31,6 +31,16 @@ public class Activiteit {
         this.titel = titel;
     }
 
+    public boolean isEvenement() {
+        return datum != 0;
+    }
+
+    public Calendar getDatum() {
+        Calendar cal = Calendar.getInstance(Locale.ENGLISH);
+        cal.setTimeInMillis(datum);
+        return cal;
+    }
+
     public Calendar getAangemaakt(){
         Calendar cal = Calendar.getInstance(Locale.ENGLISH);
         cal.setTimeInMillis(aangemaakt);
