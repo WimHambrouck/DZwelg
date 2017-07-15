@@ -21,6 +21,15 @@ android {
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
     }
+    productFlavors {
+        dev {
+            applicationIdSuffix ".dev"
+            resValue "string", "app_name", "DZwelg-dev"
+        }
+        prod {
+            resValue "string", "app_name", "DZwelg"
+        }
+    }
     compileOptions {
         targetCompatibility 1.8
         sourceCompatibility 1.8
