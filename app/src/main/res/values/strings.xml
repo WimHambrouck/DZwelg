@@ -40,4 +40,5 @@
     <string name="nul_euro">0,00 €</string>
     <string name="afrekenen">Afrekenen</string>
     <string name="totaal">Totaal:</string>
+    <string name="fout_inladen_leden">Fout bij inladen leden, check of je verbonden bent met internet.</string>
 </resources>

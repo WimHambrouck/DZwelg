@@ -16,9 +16,11 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.SearchView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.github.clans.fab.FloatingActionButton;
 import com.github.clans.fab.FloatingActionMenu;
+import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -50,6 +52,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     private static final String LOG_TAG = UserListActivity.class.getSimpleName();
     public static final String EXTRA_LID_ID = "LID_ID";
+    private static final int CREDIT_ACTIVITY_RESULT = 1;
+    private static final int VERKOOP_ACTIVITY_RESULT = 2;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -107,15 +111,26 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
             creditActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
-            startActivity(creditActivity);
-            mFab.close(false);
+            startActivityForResult(creditActivity, CREDIT_ACTIVITY_RESULT);
         });
 
         mFabDebit.setOnClickListener(view -> {
             Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
             verkoopActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
-            startActivity(verkoopActivity);
+            startActivityForResult(verkoopActivity, VERKOOP_ACTIVITY_RESULT);
         });
+    }
+
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
+        mFab.close(true);
+        mRecyclerView.setAdapter(mAdapter);
+
+        if (requestCode == CREDIT_ACTIVITY_RESULT) {
+            //lid veronderstel ik?
+        } else if (requestCode == VERKOOP_ACTIVITY_RESULT) {
+
+        }
     }
 
     @Override
@@ -134,8 +149,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         }
         return super.onOptionsItemSelected(item);
     }
-
-
 
     @Override
     public boolean onQueryTextSubmit(final String query) {
@@ -169,6 +182,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mGefilterdeLeden = tempLijst;
         mRecyclerView.setAdapter(mAdapter);
     }
+
 
 
     private void showProgressDialog() {
@@ -216,11 +230,9 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
             @Override
             public void onChildChanged(DataSnapshot dataSnapshot, String s) {
-                Lid lid = dataSnapshot.getValue(Lid.class);
-
-                mLeden.set(mLeden.indexOf(lid), lid);
-                mGefilterdeLeden = mLeden;
-                mRecyclerView.setAdapter(mAdapter);
+                //gezien we enkel naam weergeven en veranderen van naam niet mag, is dit geen use
+                //case. Eventuele andere info (zoals bedrag) die wordt weergegeven, wordt
+                //geüpdate door UserDetailFragment
             }
 
             @Override
@@ -237,11 +249,14 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             @Override
             public void onChildMoved(DataSnapshot dataSnapshot, String s) {
                 Log.d(LOG_TAG, "child moved: " + s);
+                FirebaseCrash.log("onChildMoved getriggerd in UserListActivity!");
             }
 
             @Override
             public void onCancelled(DatabaseError databaseError) {
-                Log.e(LOG_TAG, databaseError.getMessage());
+                Log.w(LOG_TAG, "mLedenEventListener:onCancelled", databaseError.toException());
+                FirebaseCrash.report(databaseError.toException());
+                Toast.makeText(UserListActivity.this, R.string.fout_inladen_leden, Toast.LENGTH_SHORT).show();
             }
         };
     }
