@@ -172,8 +172,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mRecyclerView.setAdapter(mAdapter);
     }
 
-
-
     private void showProgressDialog() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setTitle(R.string.even_wachten);
@@ -191,7 +189,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
         }
     }
-
 
     private void setupRecyclerView() {
         mLeden = new ArrayList<>();
