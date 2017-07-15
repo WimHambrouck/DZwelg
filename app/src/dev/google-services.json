@@ -8,18 +8,18 @@
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:258825135187:android:afd519276067d39b",
+        "mobilesdk_app_id": "1:258825135187:android:5783633dda37fe66",
         "android_client_info": {
-          "package_name": "be.dijlezonen.dzwelg"
+          "package_name": "be.dijlezonen.dzwelg.dev"
         }
       },
       "oauth_client": [
         {
-          "client_id": "258825135187-itis7evkp9gqbo34aquv5pap233ald35.apps.googleusercontent.com",
+          "client_id": "258825135187-lk1kifdbc8m408ni23d2jrt1jcpum07e.apps.googleusercontent.com",
           "client_type": 1,
           "android_info": {
-            "package_name": "be.dijlezonen.dzwelg",
-            "certificate_hash": "2168E782CC844EA197F49A0BB231EAE9C3BFC207"
+            "package_name": "be.dijlezonen.dzwelg.dev",
+            "certificate_hash": "2168e782cc844ea197f49a0bb231eae9c3bfc207"
           }
         },
         {
