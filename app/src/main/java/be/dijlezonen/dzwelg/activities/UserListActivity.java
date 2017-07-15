@@ -52,8 +52,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
     private static final String LOG_TAG = UserListActivity.class.getSimpleName();
     public static final String EXTRA_LID_ID = "LID_ID";
-    private static final int CREDIT_ACTIVITY_RESULT = 1;
-    private static final int VERKOOP_ACTIVITY_RESULT = 2;
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -105,32 +103,23 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         ButterKnife.bind(this);
 
+        // TODO: 15/07/2017  aparte listener met callbaks
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
 
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
             creditActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
-            startActivityForResult(creditActivity, CREDIT_ACTIVITY_RESULT);
+            startActivity(creditActivity);
+            mFab.close(false);
         });
 
         mFabDebit.setOnClickListener(view -> {
             Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
             verkoopActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
-            startActivityForResult(verkoopActivity, VERKOOP_ACTIVITY_RESULT);
+            startActivity(verkoopActivity);
+            mFab.close(false);
         });
-    }
-
-    @Override
-    protected void onActivityResult(int requestCode, int resultCode, Intent data) {
-        mFab.close(true);
-        mRecyclerView.setAdapter(mAdapter);
-
-        if (requestCode == CREDIT_ACTIVITY_RESULT) {
-            //lid veronderstel ik?
-        } else if (requestCode == VERKOOP_ACTIVITY_RESULT) {
-
-        }
     }
 
     @Override

@@ -42,8 +42,7 @@
             android:label="@string/bedrag_toevoegen" />
         <activity
             android:name=".activities.VerkoopActivity"
-            android:label="@string/verkoop"
-            android:parentActivityName=".activities.UserListActivity" />
+            android:label="@string/verkoop" />
     </application>
 
 </manifest>

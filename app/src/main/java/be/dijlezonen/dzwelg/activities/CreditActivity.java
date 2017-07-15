@@ -3,6 +3,7 @@ package be.dijlezonen.dzwelg.activities;
 import android.app.DialogFragment;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
@@ -36,6 +37,13 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_credit);
 
+        initActionBar();
+        initLid();
+
+        ButterKnife.bind(this);
+    }
+
+    private void initLid() {
         Intent myIntent = getIntent();
         String lidId = myIntent.getExtras().getString(UserListActivity.EXTRA_LID_ID);
 
@@ -57,8 +65,6 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
         } else {
             finish();
         }
-
-        ButterKnife.bind(this);
     }
 
     @OnClick({R.id.btnTien, R.id.btnTwintig, R.id.btnVijftig, R.id.btnHonderd})
@@ -70,6 +76,23 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
     public void eigenBedrag() {
         DialogFragment dialog = new EigenBedragDialogFragment();
         dialog.show(getFragmentManager(), "Wat is fragment?");
+    }
+
+    private void initActionBar() {
+        ActionBar actionBar = getSupportActionBar();
+
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+        }
+    }
+
+    /**
+     * Als de back toets (aangemaakt met setDisplayHomeAsUpEnabled) wordt ingedrukt
+     */
+    @Override
+    public boolean onSupportNavigateUp() {
+        finish();
+        return true;
     }
 
     private void laadBedrag(double bedrag) {
