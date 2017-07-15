@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="ref_evenementen" translatable="false">evenementen</string>
+    <string name="ref_activiteit" translatable="false">activiteiten</string>
     <string name="extra_event_title" translatable="false">event</string>
     <string name="ref_leden" translatable="false">leden</string>
     <string name="ref_consumpties" translatable="false">consumpties</string>

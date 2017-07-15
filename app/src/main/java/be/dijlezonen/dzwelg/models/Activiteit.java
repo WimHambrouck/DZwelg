@@ -4,12 +4,14 @@ import java.util.Calendar;
 import java.util.Locale;
 
 @SuppressWarnings("WeakerAccess")
-public class Evenement {
+public class Activiteit {
     private String id;
     private String titel;
-    private Long aangemaakt;
+    private long aangemaakt;
+    private long datum;
+    private double tegoed;
 
-    public Evenement() {
+    public Activiteit() {
         // empty constructor needed for firebase
     }
 

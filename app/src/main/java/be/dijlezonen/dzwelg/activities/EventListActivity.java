@@ -17,7 +17,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import be.dijlezonen.dzwelg.R;
-import be.dijlezonen.dzwelg.models.Evenement;
+import be.dijlezonen.dzwelg.models.Activiteit;
 import butterknife.ButterKnife;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
@@ -35,15 +35,15 @@ public class EventListActivity extends AppCompatActivity {
 
         setTitle(getString(R.string.activity_event_titel));
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_evenementen));
+        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteit));
 
         GridView eventsGrid = ButterKnife.findById(this, R.id.gridEvents);
 
-        FirebaseListAdapter<Evenement> fbList = new FirebaseListAdapter<Evenement>(
-                this, Evenement.class, R.layout.event, dbRef) {
+        FirebaseListAdapter<Activiteit> fbList = new FirebaseListAdapter<Activiteit>(
+                this, Activiteit.class, R.layout.event, dbRef) {
 
             @Override
-            protected void populateView(View v, final Evenement model, int position) {
+            protected void populateView(View v, final Activiteit model, int position) {
                 if (mProgressDialog.isShowing()) {
                     mProgressDialog.dismiss();
                 }
