@@ -6,7 +6,9 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DatabaseReference;
@@ -67,6 +69,16 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
         MenuInflater inflater = getMenuInflater();
         inflater.inflate(R.menu.menu_verkoop, menu);
         return true;
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        if (item.getItemId() == R.id.menu_verkoop_afrekenen) {
+            Toast.makeText(this, "ZO VEEL GELD MAN", Toast.LENGTH_SHORT).show();
+            return true;
+        } else {
+            return super.onOptionsItemSelected(item);
+        }
     }
 
     private void updateTotaal() {
