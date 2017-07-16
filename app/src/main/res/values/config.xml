@@ -1,7 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
+    <!-- Firebase references -->
     <string name="ref_activiteit" translatable="false">activiteiten</string>
-    <string name="extra_event_title" translatable="false">event</string>
     <string name="ref_leden" translatable="false">leden</string>
     <string name="ref_consumpties" translatable="false">consumpties</string>
+    <string name="ref_child_naam" translatable="false">naam</string>
+    <!-- Extras (bij intents) -->
+    <string name="extra_event_title" translatable="false">event</string>
 </resources>

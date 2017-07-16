@@ -50,7 +50,11 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
         numberFormatter = NumberFormat.getCurrencyInstance();
         numberFormatter.setCurrency(Currency.getInstance("EUR"));
 
-        Query consumptieRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_consumpties)).orderByChild("naam");
+        initConsumptieLijst();
+    }
+
+    private void initConsumptieLijst() {
+        Query consumptieRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_consumpties)).orderByChild(getString(R.string.ref_child_naam));
 
         FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> firebaseRecyclerAdapter =
                 new ConsumptieRecyclerAdapter(
