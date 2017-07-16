@@ -17,9 +17,6 @@
         </activity>
         <activity android:name=".activities.EventListActivity" />
         <activity
-            android:name=".activities.EventActivity"
-            android:parentActivityName=".activities.EventListActivity" />
-        <activity
             android:name=".activities.UserListActivity"
             android:label="@string/title_user_list"
             android:parentActivityName=".activities.EventListActivity"
