@@ -9,6 +9,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.Toast;
 
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
@@ -45,7 +46,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
 
     private void initLid() {
         Intent myIntent = getIntent();
-        String lidId = myIntent.getExtras().getString(UserListActivity.EXTRA_LID_ID);
+        String lidId = myIntent.getExtras().getString(getString(R.string.extra_lid_id));
 
         if (lidId != null) {
             mLidRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(lidId);
@@ -75,7 +76,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
     @OnClick(R.id.btnEigenBedrag)
     public void eigenBedrag() {
         DialogFragment dialog = new EigenBedragDialogFragment();
-        dialog.show(getFragmentManager(), "Wat is fragment?");
+        dialog.show(getFragmentManager(), "dialog");
     }
 
     private void initActionBar() {
@@ -110,8 +111,9 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
                     .create().show();
         } else {
             try {
-                mLid.updateSaldo(bedrag);
-                mLidRef.child("saldo").setValue(mLid.getSaldo());
+                mLid.creditSaldo(bedrag);
+                mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
+                Toast.makeText(CreditActivity.this, getString(R.string.success_opgeladen, bedrag), Toast.LENGTH_SHORT).show();
                 finish();
             } catch (BedragException e) {
                 builder.setTitle("Fout!")

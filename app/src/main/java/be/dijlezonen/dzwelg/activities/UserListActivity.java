@@ -51,7 +51,6 @@ import static android.support.v4.app.NavUtils.navigateUpFromSameTask;
 public class UserListActivity extends AppCompatActivity implements SearchView.OnQueryTextListener, SearchView.OnCloseListener {
 
     private static final String LOG_TAG = UserListActivity.class.getSimpleName();
-    public static final String EXTRA_LID_ID = "LID_ID";
 
     /**
      * Whether or not the activity is in two-pane mode, i.e. running on a tablet
@@ -109,14 +108,14 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
-            creditActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
+            creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getId());
             startActivity(creditActivity);
             mFab.close(false);
         });
 
         mFabDebit.setOnClickListener(view -> {
             Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
-            verkoopActivity.putExtra(EXTRA_LID_ID, mActiefLid.getId());
+            verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getId());
             startActivity(verkoopActivity);
             mFab.close(false);
         });

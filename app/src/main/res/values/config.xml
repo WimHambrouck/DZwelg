@@ -5,6 +5,8 @@
     <string name="ref_leden" translatable="false">leden</string>
     <string name="ref_consumpties" translatable="false">consumpties</string>
     <string name="ref_child_naam" translatable="false">naam</string>
+    <string name="ref_child_saldo" translatable="false">saldo</string>
     <!-- Extras (bij intents) -->
     <string name="extra_event_title" translatable="false">event</string>
+    <string name="extra_lid_id" translatable="false">lid_id</string>
 </resources>

@@ -1,10 +1,12 @@
 package be.dijlezonen.dzwelg.activities;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
@@ -12,8 +14,14 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseException;
+import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
 import java.util.ArrayList;
@@ -22,17 +30,25 @@ import java.util.List;
 
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.adapters.ConsumptieRecyclerAdapter;
+import be.dijlezonen.dzwelg.exceptions.BedragException;
+import be.dijlezonen.dzwelg.exceptions.SaldoOntoereikendException;
 import be.dijlezonen.dzwelg.models.Consumptie;
 import be.dijlezonen.dzwelg.models.ConsumptieViewHolder;
 import be.dijlezonen.dzwelg.models.Consumptielijn;
+import be.dijlezonen.dzwelg.models.Lid;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
 public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecyclerAdapter.ConsumptieRecyclerAdapterCallback {
 
+    private static final String LOG_TAG = VerkoopActivity.class.getSimpleName();
     private NumberFormat numberFormatter;
     private List<Consumptielijn> consumptielijnen;
+    private Lid mLid;
+    private DatabaseReference mLidRef;
+    private double mTotaal;
+
 
     @BindView(R.id.txt_totaalbedrag)
     TextView txtTotaal;
@@ -41,6 +57,29 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verkoop);
+
+        Intent intent = getIntent();
+        String lidId = intent.getExtras().getString(getString(R.string.extra_lid_id));
+
+        if (lidId != null) {
+            mLidRef = FirebaseDatabase.getInstance()
+                    .getReference(getString(R.string.ref_leden))
+                    .child(lidId);
+            mLidRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(DataSnapshot dataSnapshot) {
+                    mLid = dataSnapshot.getValue(Lid.class);
+                }
+
+                @Override
+                public void onCancelled(DatabaseError databaseError) {
+                    FirebaseCrash.report(new DatabaseException(databaseError.getMessage()));
+                    Log.e(LOG_TAG, databaseError.toString());
+                }
+            });
+        } else {
+            finish();
+        }
 
         initActionBar();
 
@@ -54,7 +93,9 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
     }
 
     private void initConsumptieLijst() {
-        Query consumptieRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_consumpties)).orderByChild(getString(R.string.ref_child_naam));
+        Query consumptieRef = FirebaseDatabase.getInstance()
+                .getReference(getString(R.string.ref_consumpties))
+                .orderByChild(getString(R.string.ref_child_naam));
 
         FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> firebaseRecyclerAdapter =
                 new ConsumptieRecyclerAdapter(
@@ -89,7 +130,15 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         if (item.getItemId() == R.id.menu_verkoop_afrekenen) {
-            Toast.makeText(this, "ZO VEEL GELD MAN", Toast.LENGTH_SHORT).show();
+            try {
+                mLid.debitSaldo(mTotaal);
+                mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
+                finish();
+            } catch (SaldoOntoereikendException e) {
+                Toast.makeText(VerkoopActivity.this, "saldo ontoereikend", Toast.LENGTH_SHORT).show();
+            } catch (BedragException e) {
+                Toast.makeText(VerkoopActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
+            }
             return true;
         } else {
             return super.onOptionsItemSelected(item);
@@ -111,6 +160,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
             totaal += consumptielijn.getConsumptie().getPrijs() * consumptielijn.getAantal();
         }
         txtTotaal.setText(numberFormatter.format(totaal));
+        mTotaal = totaal;
     }
 
     @Override

@@ -2,8 +2,7 @@ package be.dijlezonen.dzwelg.exceptions;
 
 public class BedragException extends Exception {
 
-
-    public BedragException() {
+    BedragException() {
         super();
     }
 
