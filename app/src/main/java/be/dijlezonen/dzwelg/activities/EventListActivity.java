@@ -7,21 +7,20 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.GridView;
-import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
 import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.Query;
 
 import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.adapters.EventListAdapter;
 import be.dijlezonen.dzwelg.models.Activiteit;
 import butterknife.ButterKnife;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
-public class EventListActivity extends AppCompatActivity {
+public class EventListActivity extends AppCompatActivity implements EventListAdapter.EventListAdapterCallback {
 
     private ProgressDialog mProgressDialog;
 
@@ -31,32 +30,18 @@ public class EventListActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_event_list);
 
-        showProgressDialog();
-
         setTitle(getString(R.string.activity_event_titel));
 
-        DatabaseReference dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteit));
+        showProgressDialog();
+
+        Query dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteit))
+                .orderByChild("starttijd")
+                .endAt(System.currentTimeMillis());
+
 
         GridView eventsGrid = ButterKnife.findById(this, R.id.gridEvents);
-
-        FirebaseListAdapter<Activiteit> fbList = new FirebaseListAdapter<Activiteit>(
-                this, Activiteit.class, R.layout.event, dbRef) {
-
-            @Override
-            protected void populateView(View v, final Activiteit model, int position) {
-                if (mProgressDialog.isShowing()) {
-                    mProgressDialog.dismiss();
-                }
-                TextView txtTitel = ButterKnife.findById(v, R.id.txt_event_titel);
-                txtTitel.setText(model.getTitel());
-                v.setOnClickListener(view -> {
-                    Intent intent = new Intent(EventListActivity.this, UserListActivity.class);
-                    intent.putExtra(getString(R.string.extra_event_title), model.getTitel());
-                    startActivity(intent);
-                });
-            }
-        };
-
+        FirebaseListAdapter<Activiteit> fbList =
+                new EventListAdapter(this, Activiteit.class, R.layout.event, dbRef);
         eventsGrid.setAdapter(fbList);
     }
 
@@ -80,11 +65,20 @@ public class EventListActivity extends AppCompatActivity {
     }
 
     private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setTitle(getString(R.string.even_wachten));
-        mProgressDialog.setMessage(getString(R.string.laden_van_evenementen));
+        if (mProgressDialog == null) {
+            mProgressDialog = new ProgressDialog(this);
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setTitle(getString(R.string.even_wachten));
+            mProgressDialog.setMessage(getString(R.string.laden_van_evenementen));
+        }
         mProgressDialog.show();
+    }
+
+    @Override
+    public void hideProgressbar() {
+        if (mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
+        }
     }
 }
