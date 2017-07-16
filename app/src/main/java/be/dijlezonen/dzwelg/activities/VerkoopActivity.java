@@ -133,6 +133,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
             try {
                 mLid.debitSaldo(mTotaal);
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
+                Toast.makeText(VerkoopActivity.this, getString(R.string.success_afgetrokken, mTotaal), Toast.LENGTH_SHORT).show();
                 finish();
             } catch (SaldoOntoereikendException e) {
                 Toast.makeText(VerkoopActivity.this, "saldo ontoereikend", Toast.LENGTH_SHORT).show();

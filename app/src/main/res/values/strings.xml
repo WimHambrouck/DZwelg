@@ -41,4 +41,5 @@
     <string name="totaal">Totaal:</string>
     <string name="fout_inladen_leden">Fout bij inladen leden, check of je verbonden bent met internet.</string>
     <string name="success_opgeladen">%1$.2f euro opgeladen</string>
+    <string name="success_afgetrokken">%1$.2f euro afgetrokken</string>
 </resources>
