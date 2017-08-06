@@ -32,4 +32,4 @@ android {
 ```
 Om Java 8 te laten werken, moet de Jack toolchain worden gebruikt (zie `jackOptions` hierboven). Dit heeft als gevolg dat Instant Run niet beschikbaar is.
 
-**Dit staat echter op punt te veranderen bij vanaf Android Studio 3.0** (zie: https://developer.android.com/guide/platform/j8-jack.html)
+**Dit staat echter op punt te veranderen bij vanaf Android Studio 3.0** (zie issue #19)
