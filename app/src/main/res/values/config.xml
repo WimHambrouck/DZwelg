@@ -2,7 +2,7 @@
 <resources>
     <!-- Firebase references -->
     <string name="ref_activiteit" translatable="false">activiteiten</string>
-    <string name="ref_leden" translatable="false">leden</string>
+    <string name="ref_leden" translatable="false">gebruikers</string>
     <string name="ref_consumpties" translatable="false">consumpties</string>
     <string name="ref_child_naam" translatable="false">naam</string>
     <string name="ref_child_saldo" translatable="false">saldo</string>

@@ -1,7 +1,9 @@
 package be.dijlezonen.dzwelg.models;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Currency;
+import java.util.HashMap;
 import java.util.Locale;
 
 import be.dijlezonen.dzwelg.exceptions.BedragException;
@@ -13,6 +15,7 @@ public class Lid {
     private String achternaam;
     private double saldo;
     private boolean actiefInLijst;
+    private HashMap<String, Boolean> rollen;
 
     public Lid() {
         // lege constructor voor firebase
@@ -100,5 +103,17 @@ public class Lid {
 
     public void setActiefInLijst(boolean actiefInLijst) {
         this.actiefInLijst = actiefInLijst;
+    }
+
+    public boolean isLid() {
+        return rollen.containsKey(Rollen.Lid);
+    }
+
+    public HashMap<String, Boolean> getRollen() {
+        return rollen;
+    }
+
+    public void setRollen(HashMap<String, Boolean> rollen) {
+        this.rollen = rollen;
     }
 }

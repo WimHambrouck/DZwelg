@@ -208,9 +208,11 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 }
                 Lid nieuwLid = dataSnapshot.getValue(Lid.class);
                 nieuwLid.setId(dataSnapshot.getKey());
-                mLeden.add(nieuwLid);
-                mGefilterdeLeden = mLeden;
-                mRecyclerView.setAdapter(mAdapter);
+                if(nieuwLid.isLid()) {
+                    mLeden.add(nieuwLid);
+                    mGefilterdeLeden = mLeden;
+                    mRecyclerView.setAdapter(mAdapter);
+                }
             }
 
             @Override
