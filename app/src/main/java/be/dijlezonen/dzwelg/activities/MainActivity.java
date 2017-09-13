@@ -1,9 +1,11 @@
 package be.dijlezonen.dzwelg.activities;
 
 import android.app.ProgressDialog;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.Button;
@@ -16,10 +18,17 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
+import com.google.firebase.database.ChildEventListener;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import java.util.Locale;
 
 import be.dijlezonen.dzwelg.R;
+import be.dijlezonen.dzwelg.models.Rollen;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -59,8 +68,42 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuthStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
-                // user is signed in, start EventListActivity
-                signInSucces();
+                // user is signed in, get corresponding user from db and check role
+                DatabaseReference lidRef = FirebaseDatabase.getInstance()
+                        .getReference(getString(R.string.ref_leden))
+                        .child(user.getUid())
+                        .child(getString(R.string.ref_rollen))
+                        .child(Rollen.Kassaverantwoordelijke);
+
+                lidRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        boolean kassamens = false;
+                        if(dataSnapshot.exists())
+                        {
+                            kassamens = dataSnapshot.getValue(Boolean.class);
+                        }
+                        if(kassamens)
+                        {
+                            signInSucces();
+                        } else {
+                            AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
+                            builder.setTitle(android.R.string.dialog_alert_title);
+                            builder.setMessage(R.string.fout_gebruiker_geen_rechten);
+                            builder.setNeutralButton(android.R.string.ok, (dialog, which) -> {
+                                dialog.dismiss();
+                            });
+                            builder.show();
+
+                        }
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+
+                    }
+                });
+
             }
         };
     }
