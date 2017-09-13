@@ -44,4 +44,5 @@
     <string name="success_afgetrokken">%1$.2f euro afgetrokken</string>
     <string name="ref_rollen">rollen</string>
     <string name="fout_gebruiker_geen_rechten">Deze gebruiker heeft geen toegang tot te app.\nContacteer het bestuur om van deze gebruiker een kassabeheerder te maken.</string>
+    <string name="fout_database_verbinding">Fout bij verbinden met database: %s</string>
 </resources>

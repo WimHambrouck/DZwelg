@@ -90,17 +90,20 @@ public class MainActivity extends AppCompatActivity {
                             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             builder.setTitle(android.R.string.dialog_alert_title);
                             builder.setMessage(R.string.fout_gebruiker_geen_rechten);
-                            builder.setNeutralButton(android.R.string.ok, (dialog, which) -> {
-                                dialog.dismiss();
-                            });
+                            builder.setNeutralButton(android.R.string.ok, (dialog, which) -> dialog.dismiss());
                             builder.show();
-
                         }
                     }
 
                     @Override
                     public void onCancelled(DatabaseError databaseError) {
-
+                        Toast.makeText(MainActivity.this,
+                                String.format(
+                                        getString(R.string.fout_database_verbinding),
+                                        databaseError.getMessage()
+                                ),
+                                Toast.LENGTH_LONG
+                        ).show();
                     }
                 });
 
