@@ -130,7 +130,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
 //
 //                DatabaseReference undodo = mLidRef
 //                        .child(getString(R.string.ref_transacties))
-//                        .child(String.valueOf(-1 * undoTransactie.getTimestamp())); //inverse timestamp voor automatische anti-chronologische sortering
+//                        .child(String.valueOf(undoTransactie.getTimestampForKey())); //inverse timestamp voor automatische anti-chronologische sortering
 //                undodo.setValue(undoTransactie);
 //
 //                mLidRef.child(getString(R.string.ref_child_saldo)).setValue(creditTransactie.undoAction(mLid).getSaldo());
