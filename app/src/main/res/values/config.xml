@@ -6,6 +6,7 @@
     <string name="ref_consumpties" translatable="false">consumpties</string>
     <string name="ref_child_naam" translatable="false">naam</string>
     <string name="ref_child_saldo" translatable="false">saldo</string>
+    <string name="ref_transacties" translatable="false">transacties</string>
     <!-- Extras (bij intents) -->
     <string name="extra_event_title" translatable="false">event</string>
     <string name="extra_lid_id" translatable="false">lid_id</string>

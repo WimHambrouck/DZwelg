@@ -276,7 +276,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 // collapse search view (zodra we op een lid krijgen, mag de filtering weg)
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(UserDetailFragment.ARG_ITEM_ID, lid.getId());
+                    arguments.putString(UserDetailFragment.ARG_USER_ID, lid.getId());
                     UserDetailFragment fragment = new UserDetailFragment();
                     fragment.setArguments(arguments);
                     getSupportFragmentManager().beginTransaction()
@@ -286,7 +286,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, UserDetailActivity.class);
-                    intent.putExtra(UserDetailFragment.ARG_ITEM_ID, lid.getId());
+                    intent.putExtra(UserDetailFragment.ARG_USER_ID, lid.getId());
                     context.startActivity(intent);
                 }
             });

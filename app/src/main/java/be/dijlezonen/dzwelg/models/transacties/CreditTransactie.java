@@ -17,7 +17,7 @@ public class CreditTransactie extends Transactie implements ICanBeUndone {
     private double bedrag;
 
     public CreditTransactie(String userId, double bedrag) {
-        super(userId);
+        super(TransactieSoort.CREDIT, userId);
         this.bedrag = bedrag;
     }
 

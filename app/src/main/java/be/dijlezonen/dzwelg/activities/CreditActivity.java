@@ -23,6 +23,8 @@ import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.exceptions.BedragException;
 import be.dijlezonen.dzwelg.fragments.EigenBedragDialogFragment;
 import be.dijlezonen.dzwelg.models.Lid;
+import be.dijlezonen.dzwelg.models.Transactie;
+import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -32,6 +34,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
     private static final String LOG_TAG = CreditActivity.class.getSimpleName();
     private Lid mLid;
     private DatabaseReference mLidRef;
+    private DatabaseReference mTransactieRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -112,7 +115,17 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
         } else {
             try {
                 mLid.creditSaldo(bedrag);
+
+                //nieuwe creditTransactie om weg te schrijven naar transacties van gebruiker
+                CreditTransactie creditTransactie = new CreditTransactie(mLid.getId(), bedrag);
+                //transacties als key timestamp meegeven voor snellere ophaling later
+                DatabaseReference newTransactie = mLidRef
+                        .child(getString(R.string.ref_transacties))
+                        .child(String.valueOf(creditTransactie.getTimestamp()));
+                newTransactie.setValue(creditTransactie);
+
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
+
                 Toast.makeText(CreditActivity.this, getString(R.string.success_opgeladen, bedrag), Toast.LENGTH_SHORT).show();
                 finish();
             } catch (BedragException e) {

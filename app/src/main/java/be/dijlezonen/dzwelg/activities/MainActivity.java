@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity {
                 lidRef.addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
+                        //als gebruiker kassaverantwoordelijke is, mag hij aanmelden, anders niet
                         boolean kassamens = false;
                         if(dataSnapshot.exists())
                         {

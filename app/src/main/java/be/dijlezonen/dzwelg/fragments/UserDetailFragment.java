@@ -4,21 +4,28 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
 
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.List;
+
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.activities.UserDetailActivity;
 import be.dijlezonen.dzwelg.activities.UserListActivity;
 import be.dijlezonen.dzwelg.models.Lid;
+import be.dijlezonen.dzwelg.models.Transactie;
+import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -33,13 +40,13 @@ public class UserDetailFragment extends Fragment {
      * The fragment argument representing the item ID that this fragment
      * represents.
      */
-    public static final String ARG_ITEM_ID = "item_id";
+    public static final String ARG_USER_ID = "user_id";
 
     private Lid mLid;
-    private DatabaseReference mLedenRef;
 
     @BindView(R.id.user_detail_saldo)
     TextView mTxtSaldo;
+
 
     private CollapsingToolbarLayout mAppBarLayout;
 
@@ -72,11 +79,12 @@ public class UserDetailFragment extends Fragment {
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        if (getArguments().containsKey(ARG_ITEM_ID)) {
+        if (getArguments().containsKey(ARG_USER_ID)) {
             setUpAppBar();
-            String eventId = getArguments().getString(ARG_ITEM_ID);
-            if (eventId != null) {
-                mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(eventId);
+            String userId = getArguments().getString(ARG_USER_ID);
+            if (userId != null) {
+                DatabaseReference mLedenRef;
+                mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(userId);
                 mLedenRef.addValueEventListener(lidListener);
             }
         }
@@ -99,6 +107,7 @@ public class UserDetailFragment extends Fragment {
     private void updateViews() {
         if (mLid != null) {
             mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
+
         } else {
             mTxtSaldo.setText("");
         }

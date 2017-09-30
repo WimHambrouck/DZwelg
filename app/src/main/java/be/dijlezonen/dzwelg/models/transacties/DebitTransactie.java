@@ -13,7 +13,7 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
     private List<Consumptielijn> consumptielijnen;
 
     public DebitTransactie(String userId, List<Consumptielijn> consumptielijnen) {
-        super(userId);
+        super(TransactieSoort.DEBIT, userId);
         this.consumptielijnen = consumptielijnen;
     }
 
