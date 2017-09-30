@@ -36,6 +36,7 @@ import be.dijlezonen.dzwelg.models.Consumptie;
 import be.dijlezonen.dzwelg.models.ConsumptieViewHolder;
 import be.dijlezonen.dzwelg.models.Consumptielijn;
 import be.dijlezonen.dzwelg.models.Lid;
+import be.dijlezonen.dzwelg.models.transacties.DebitTransactie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -133,6 +134,13 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
             try {
                 mLid.debitSaldo(mTotaal);
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
+
+                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), consumptielijnen);
+                DatabaseReference debitRef = mLidRef
+                        .child(getString(R.string.ref_transacties))
+                        .child(String.valueOf(debitTransactie.getTimestamp()));
+                debitRef.setValue(debitTransactie);
+
                 Toast.makeText(VerkoopActivity.this, getString(R.string.success_afgetrokken, mTotaal), Toast.LENGTH_SHORT).show();
                 finish();
             } catch (SaldoOntoereikendException e) {
