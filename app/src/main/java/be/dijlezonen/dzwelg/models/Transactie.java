@@ -20,7 +20,7 @@ public abstract class Transactie {
     protected Transactie(TransactieSoort soort, String userId) {
         this.soort = soort;
         this.userId = userId;
-        this.timestamp = new Date().getTime();
+        this.timestamp = -1 * new Date().getTime(); // negatieve timestamp om antichronologisch te kunnen ordenen
     }
 
     public abstract String toString();
@@ -31,6 +31,10 @@ public abstract class Transactie {
 
     public long getTimestamp() {
         return timestamp;
+    }
+
+    public long getTimestampForKey() {
+        return -1 * timestamp;
     }
 
     public void setTimestamp(long timestamp) {

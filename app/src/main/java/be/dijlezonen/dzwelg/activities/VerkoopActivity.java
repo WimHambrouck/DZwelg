@@ -138,7 +138,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                 DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), consumptielijnen, mTotaal);
                 DatabaseReference debitRef = mLidRef
                         .child(getString(R.string.ref_transacties))
-                        .child(String.valueOf(debitTransactie.getTimestamp()));
+                        .child(String.valueOf(debitTransactie.getTimestampForKey()));
                 debitRef.setValue(debitTransactie);
 
                 Toast.makeText(VerkoopActivity.this, getString(R.string.success_afgetrokken, mTotaal), Toast.LENGTH_SHORT).show();

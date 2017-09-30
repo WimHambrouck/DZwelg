@@ -120,10 +120,20 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
                 //transacties als key timestamp meegeven voor snellere ophaling later
                 DatabaseReference newTransactie = mLidRef
                         .child(getString(R.string.ref_transacties))
-                        .child(String.valueOf(creditTransactie.getTimestamp()));
+                        .child(String.valueOf(creditTransactie.getTimestampForKey())); //timestamp is geïnverteerd, dus moet terug positief worden gemaakt voor de key
                 newTransactie.setValue(creditTransactie);
 
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
+
+//                UndoTransactie undoTransactie = new UndoTransactie(mLid.getId(), creditTransactie);
+//
+//
+//                DatabaseReference undodo = mLidRef
+//                        .child(getString(R.string.ref_transacties))
+//                        .child(String.valueOf(-1 * undoTransactie.getTimestamp())); //inverse timestamp voor automatische anti-chronologische sortering
+//                undodo.setValue(undoTransactie);
+//
+//                mLidRef.child(getString(R.string.ref_child_saldo)).setValue(creditTransactie.undoAction(mLid).getSaldo());
 
                 Toast.makeText(CreditActivity.this, getString(R.string.success_opgeladen, bedrag), Toast.LENGTH_SHORT).show();
                 finish();
