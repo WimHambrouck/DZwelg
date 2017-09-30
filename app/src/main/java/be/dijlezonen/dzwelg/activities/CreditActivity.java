@@ -24,6 +24,7 @@ import be.dijlezonen.dzwelg.exceptions.BedragException;
 import be.dijlezonen.dzwelg.fragments.EigenBedragDialogFragment;
 import be.dijlezonen.dzwelg.models.Lid;
 import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
+import be.dijlezonen.dzwelg.models.transacties.UndoTransactie;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
