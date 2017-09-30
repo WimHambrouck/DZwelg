@@ -1,7 +1,6 @@
 package be.dijlezonen.dzwelg.models;
 
 import java.text.NumberFormat;
-import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.Locale;

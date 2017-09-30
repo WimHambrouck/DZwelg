@@ -23,7 +23,6 @@ import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.exceptions.BedragException;
 import be.dijlezonen.dzwelg.fragments.EigenBedragDialogFragment;
 import be.dijlezonen.dzwelg.models.Lid;
-import be.dijlezonen.dzwelg.models.Transactie;
 import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -34,7 +33,6 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
     private static final String LOG_TAG = CreditActivity.class.getSimpleName();
     private Lid mLid;
     private DatabaseReference mLidRef;
-    private DatabaseReference mTransactieRef;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

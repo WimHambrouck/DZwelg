@@ -135,7 +135,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                 mLid.debitSaldo(mTotaal);
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
 
-                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), consumptielijnen);
+                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), consumptielijnen, mTotaal);
                 DatabaseReference debitRef = mLidRef
                         .child(getString(R.string.ref_transacties))
                         .child(String.valueOf(debitTransactie.getTimestamp()));
