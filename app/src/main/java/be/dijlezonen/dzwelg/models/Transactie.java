@@ -1,5 +1,7 @@
 package be.dijlezonen.dzwelg.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.util.Date;
 
 /**
@@ -33,6 +35,7 @@ public abstract class Transactie {
         return timestamp;
     }
 
+    @Exclude
     public long getTimestampForKey() {
         return -1 * timestamp;
     }
