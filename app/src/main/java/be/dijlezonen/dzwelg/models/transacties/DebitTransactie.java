@@ -11,12 +11,12 @@ import be.dijlezonen.dzwelg.models.ICanBeUndone;
 public class DebitTransactie extends Transactie implements ICanBeUndone {
 
     private List<Consumptielijn> consumptielijnen;
-    private double totaal;
+    private double bedrag;
 
-    public DebitTransactie(String userId, List<Consumptielijn> consumptielijnen, double totaal) {
+    public DebitTransactie(String userId, List<Consumptielijn> consumptielijnen, double bedrag) {
         super(TransactieSoort.DEBIT, userId);
         this.consumptielijnen = consumptielijnen;
-        this.totaal = totaal;
+        this.bedrag = bedrag;
     }
 
     @Override
@@ -33,7 +33,7 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
         return "Debit";
     }
 
-    public double getTotaal() {
-        return totaal;
+    public double getBedrag() {
+        return bedrag;
     }
 }
