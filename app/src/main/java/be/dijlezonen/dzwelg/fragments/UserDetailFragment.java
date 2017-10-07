@@ -87,16 +87,12 @@ public class UserDetailFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        updateViews();
+        //updateViews();
 
         return rootView;
     }
 
     private void updateViews() {
-        assert mLid != null;
         mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
-//        } else {
-//            mTxtSaldo.setText("");
-//        }
     }
 }
