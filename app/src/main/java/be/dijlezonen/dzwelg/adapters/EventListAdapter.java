@@ -37,7 +37,7 @@ public class EventListAdapter extends FirebaseListAdapter<Activiteit> {
         txtTitel.setText(activiteit.getTitel());
         v.setOnClickListener(view -> {
             Intent intent = new Intent(mActivity, UserListActivity.class);
-            intent.putExtra(mActivity.getString(R.string.extra_event_title), activiteit.getTitel());
+            intent.putExtra(mActivity.getString(R.string.extra_event), activiteit);
             mActivity.startActivity(intent);
         });
     }

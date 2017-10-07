@@ -33,6 +33,7 @@ import java.util.List;
 
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.fragments.UserDetailFragment;
+import be.dijlezonen.dzwelg.models.Activiteit;
 import be.dijlezonen.dzwelg.models.Lid;
 import butterknife.BindView;
 import butterknife.ButterKnife;
@@ -81,6 +82,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     @BindView(R.id.fab_menu_debit)
     FloatingActionButton mFabDebit;
 
+    private Activiteit mEvent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -102,13 +105,14 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         ButterKnife.bind(this);
 
-        // TODO: 15/07/2017  aparte listener met callbaks
+        // TODO: 15/07/2017  aparte listener met callbacks
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
 
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
             creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getId());
+            creditActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
             startActivity(creditActivity);
             mFab.close(false);
         });
@@ -116,6 +120,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mFabDebit.setOnClickListener(view -> {
             Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
             verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getId());
+            verkoopActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
             startActivity(verkoopActivity);
             mFab.close(false);
         });
@@ -182,10 +187,13 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        mEvent = getIntent().getParcelableExtra(getString(R.string.extra_event));
+        assert mEvent != null;
+
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(getIntent().getStringExtra(getString(R.string.extra_event_title)));
+            actionBar.setTitle(mEvent.getTitel());
         }
     }
 

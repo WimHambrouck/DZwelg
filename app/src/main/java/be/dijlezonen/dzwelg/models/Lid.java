@@ -1,8 +1,11 @@
 package be.dijlezonen.dzwelg.models;
 
+import com.google.firebase.database.Exclude;
+
 import java.text.NumberFormat;
 import java.util.Currency;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Locale;
 
 import be.dijlezonen.dzwelg.exceptions.BedragException;
@@ -15,6 +18,9 @@ public class Lid {
     private double saldo;
     private boolean actiefInLijst;
     private HashMap<String, Boolean> rollen;
+
+    @Exclude
+    private List<Transactie> transacties; //automapper van firebase crashed hier anders op
 
     public Lid() {
         // lege constructor voor firebase
@@ -114,5 +120,15 @@ public class Lid {
 
     public void setRollen(HashMap<String, Boolean> rollen) {
         this.rollen = rollen;
+    }
+
+    @Exclude
+    public List<Transactie> getTransacties() {
+        return transacties;
+    }
+
+    @Exclude
+    public void setTransacties(List<Transactie> transacties) {
+        this.transacties = transacties;
     }
 }

@@ -29,10 +29,7 @@ import butterknife.ButterKnife;
  * on handsets.
  */
 public class UserDetailFragment extends Fragment {
-    /**
-     * The fragment argument representing the item ID that this fragment
-     * represents.
-     */
+
     public static final String ARG_USER_ID = "user_id";
 
     private Lid mLid;
@@ -90,18 +87,16 @@ public class UserDetailFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        if (mLid != null) {
-            updateViews();
-        }
+        updateViews();
 
         return rootView;
     }
 
     private void updateViews() {
-        if (mLid != null) {
-            mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
-        } else {
-            mTxtSaldo.setText("");
-        }
+        assert mLid != null;
+        mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
+//        } else {
+//            mTxtSaldo.setText("");
+//        }
     }
 }
