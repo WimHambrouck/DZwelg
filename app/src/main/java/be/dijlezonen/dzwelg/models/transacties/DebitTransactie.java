@@ -1,8 +1,10 @@
 package be.dijlezonen.dzwelg.models.transacties;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import be.dijlezonen.dzwelg.exceptions.SaldoOntoereikendException;
+import be.dijlezonen.dzwelg.models.Consumptie;
 import be.dijlezonen.dzwelg.models.Consumptielijn;
 import be.dijlezonen.dzwelg.models.Lid;
 import be.dijlezonen.dzwelg.models.Transactie;
@@ -15,8 +17,29 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
 
     public DebitTransactie(String userId, List<Consumptielijn> consumptielijnen, double bedrag) {
         super(TransactieSoort.DEBIT, userId);
-        this.consumptielijnen = consumptielijnen;
+        this.consumptielijnen = filterConsumptieLijnen(consumptielijnen);
         this.bedrag = bedrag;
+    }
+
+    /**
+     * Haalt alle consumptielijnen waarbij het aantal == 0 weg
+     * (m.a.w.: alleen maar de effectief aangekochte consumpties blijven over)
+     *
+     * @param consumptielijnen De te filteren consumptielijnen
+     * @return Een ArrayList met de gefilterde consumptielijnen
+     */
+    private List<Consumptielijn> filterConsumptieLijnen(List<Consumptielijn> consumptielijnen) {
+        List<Consumptielijn> gefilterdeConsumptielijnen = new ArrayList<>();
+
+        assert consumptielijnen != null;
+        for (Consumptielijn consumptielijn :
+                consumptielijnen) {
+            if (consumptielijn.getAantal() != 0) {
+                gefilterdeConsumptielijnen.add(consumptielijn);
+            }
+        }
+
+        return gefilterdeConsumptielijnen;
     }
 
     @Override

@@ -100,7 +100,6 @@ public class UserDetailFragment extends Fragment {
     private void updateViews() {
         if (mLid != null) {
             mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
-
         } else {
             mTxtSaldo.setText("");
         }
