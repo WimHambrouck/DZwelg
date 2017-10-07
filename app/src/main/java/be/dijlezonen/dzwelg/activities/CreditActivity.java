@@ -34,6 +34,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
     private static final String LOG_TAG = CreditActivity.class.getSimpleName();
     private Lid mLid;
     private DatabaseReference mLidRef;
+    private String mEventId;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,8 +48,9 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
     }
 
     private void initLid() {
-        Intent myIntent = getIntent();
-        String lidId = myIntent.getExtras().getString(getString(R.string.extra_lid_id));
+        Bundle myExtras = getIntent().getExtras();
+        String lidId = myExtras.getString(getString(R.string.extra_lid_id));
+        mEventId = myExtras.getString(getString(R.string.extra_event_id));
 
         if (lidId != null) {
             mLidRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(lidId);
@@ -116,7 +118,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
                 mLid.creditSaldo(bedrag);
 
                 //nieuwe creditTransactie om weg te schrijven naar transacties van gebruiker
-                CreditTransactie creditTransactie = new CreditTransactie(mLid.getId(), bedrag);
+                CreditTransactie creditTransactie = new CreditTransactie(mLid.getId(), bedrag, mEventId);
                 //transacties als key timestamp meegeven voor snellere ophaling later
                 DatabaseReference newTransactie = mLidRef
                         .child(getString(R.string.ref_transacties))

@@ -16,8 +16,8 @@ public class CreditTransactie extends Transactie implements ICanBeUndone {
     private static final String LOG_TAG = CreditTransactie.class.getSimpleName();
     private double bedrag;
 
-    public CreditTransactie(String userId, double bedrag) {
-        super(TransactieSoort.CREDIT, userId);
+    public CreditTransactie(String userId, double bedrag, String eventId) {
+        super(TransactieSoort.CREDIT, userId, eventId);
         this.bedrag = bedrag;
     }
 

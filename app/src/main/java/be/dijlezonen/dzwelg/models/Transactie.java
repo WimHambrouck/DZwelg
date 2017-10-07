@@ -10,18 +10,21 @@ import java.util.Date;
  */
 public abstract class Transactie {
 
+
     public enum TransactieSoort {
         CREDIT, DEBIT, UNDO
     }
 
     private String id;
     private String userId;
+    private String eventId;
     private long timestamp;
     private TransactieSoort soort;   //omdat het onmogelijk is vanuit Firebase db te weten welke subklasse het is
 
     protected Transactie(TransactieSoort soort, String userId, String eventId) {
         this.soort = soort;
         this.userId = userId;
+        this.eventId = eventId;
         this.timestamp = -1 * new Date().getTime(); // negatieve timestamp om antichronologisch te kunnen ordenen
     }
 
@@ -50,6 +53,10 @@ public abstract class Transactie {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getEventId() {
+        return eventId;
     }
 
     public TransactieSoort getSoort() {

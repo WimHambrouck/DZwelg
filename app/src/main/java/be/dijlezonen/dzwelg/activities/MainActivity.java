@@ -68,6 +68,7 @@ public class MainActivity extends AppCompatActivity {
         mFirebaseAuthStateListener = firebaseAuth -> {
             FirebaseUser user = firebaseAuth.getCurrentUser();
             if (user != null) {
+                showProgressDialog();
                 // user is signed in, get corresponding user from db and check role
                 DatabaseReference lidRef = FirebaseDatabase.getInstance()
                         .getReference(getString(R.string.ref_leden))
@@ -127,6 +128,7 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void signInSucces() {
+        mProgressDialog.dismiss();
         Intent main = new Intent(MainActivity.this, EventListActivity.class);
         startActivity(main);
         finish();
@@ -181,13 +183,14 @@ public class MainActivity extends AppCompatActivity {
     private class AuthCompleteListener implements OnCompleteListener<AuthResult> {
         @Override
         public void onComplete(@NonNull Task<AuthResult> task) {
-            mProgressDialog.dismiss();
             Log.d(LOG_TAG, "Firebase auth result: " + task.isSuccessful());
 
             // If sign in fails, display a message to the user. If sign in succeeds
             // the auth state listener will be notified and logic to handle the
             // signed in user is handled in the listener.
             if (!task.isSuccessful()) {
+                mProgressDialog.dismiss();
+
                 FirebaseCrash.logcat(Log.ERROR, LOG_TAG, "Firebase auth failed");
                 FirebaseCrash.report(task.getException());
                 String toastMessage = getString(R.string.fout_onbekend);

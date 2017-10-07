@@ -49,6 +49,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
     private Lid mLid;
     private DatabaseReference mLidRef;
     private double mTotaal;
+    String mEventId;
 
 
     @BindView(R.id.txt_totaalbedrag)
@@ -59,8 +60,9 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_verkoop);
 
-        Intent intent = getIntent();
-        String lidId = intent.getExtras().getString(getString(R.string.extra_lid_id));
+        Bundle myExtras = getIntent().getExtras();
+        String lidId = myExtras.getString(getString(R.string.extra_lid_id));
+        mEventId = myExtras.getString(getString(R.string.extra_event_id));
 
         if (lidId != null) {
             mLidRef = FirebaseDatabase.getInstance()
@@ -135,7 +137,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                 mLid.debitSaldo(mTotaal);
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
 
-                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), consumptielijnen, mTotaal);
+                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), mEventId, consumptielijnen, mTotaal);
                 DatabaseReference debitRef = mLidRef
                         .child(getString(R.string.ref_transacties))
                         .child(String.valueOf(debitTransactie.getTimestampForKey()));
