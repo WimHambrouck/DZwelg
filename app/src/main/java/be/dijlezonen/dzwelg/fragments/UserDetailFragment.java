@@ -143,7 +143,7 @@ public class UserDetailFragment extends Fragment {
     private void updateViews() {
         mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
         TransactieArrayAdapter arrayAdapter =
-                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, mLid.getTransacties());
+                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, mLid.getTransacties(), mLid);
         mTransactieLijst.setAdapter(arrayAdapter);
     }
 }
