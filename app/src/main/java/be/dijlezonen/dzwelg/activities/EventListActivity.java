@@ -35,9 +35,9 @@ public class EventListActivity extends AppCompatActivity implements EventListAda
         showProgressDialog();
 
         Query dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteit))
-                .orderByChild("starttijd")
-                .endAt(System.currentTimeMillis());
-
+                .orderByChild("actief")
+                .startAt(true)
+                .endAt(true);
 
         GridView eventsGrid = ButterKnife.findById(this, R.id.gridEvents);
         FirebaseListAdapter<Activiteit> fbList =
