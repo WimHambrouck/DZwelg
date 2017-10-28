@@ -16,6 +16,9 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
     private List<Consumptielijn> consumptielijnen;
     private double bedrag;
 
+    public DebitTransactie() {
+    }
+
     public DebitTransactie(String userId, String eventId, List<Consumptielijn> consumptielijnen, double bedrag) {
         super(TransactieSoort.DEBIT, userId, eventId);
         this.consumptielijnen = filterConsumptieLijnen(consumptielijnen);
@@ -46,6 +49,14 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
     @Override
     public Lid undoAction(Lid lid) throws SaldoOntoereikendException {
         return null;
+    }
+
+    public void setConsumptielijnen(List<Consumptielijn> consumptielijnen) {
+        this.consumptielijnen = consumptielijnen;
+    }
+
+    public void setBedrag(double bedrag) {
+        this.bedrag = bedrag;
     }
 
     public List<Consumptielijn> getConsumptielijnen() {

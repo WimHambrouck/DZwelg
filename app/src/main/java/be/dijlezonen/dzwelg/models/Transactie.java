@@ -23,6 +23,9 @@ public abstract class Transactie {
     private long timestamp;
     private TransactieSoort soort;   //omdat het onmogelijk is vanuit Firebase db te weten welke subklasse het is
 
+    public Transactie() {
+    }
+
     protected Transactie(TransactieSoort soort, String userId, String eventId) {
         this.soort = soort;
         this.userId = userId;

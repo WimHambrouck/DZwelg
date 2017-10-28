@@ -21,7 +21,7 @@ public class Lid {
     private HashMap<String, Boolean> rollen;
 
     @Exclude
-    private List<Transactie> transacties; //automapper van firebase crashed hier anders op
+    private List<Transactie> transacties;
 
     public Lid() {
         // lege constructor voor firebase

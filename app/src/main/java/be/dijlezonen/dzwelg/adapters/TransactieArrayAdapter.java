@@ -15,10 +15,6 @@ import java.util.List;
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.models.Transactie;
 
-/**
- * Created by Wim on 07/10/2017.
- */
-
 public class TransactieArrayAdapter extends ArrayAdapter<Transactie> {
 
     private final int mResource;

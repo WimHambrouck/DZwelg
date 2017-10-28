@@ -33,6 +33,7 @@ import be.dijlezonen.dzwelg.models.Lid;
 import be.dijlezonen.dzwelg.models.Transactie;
 import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
 import be.dijlezonen.dzwelg.models.transacties.DebitTransactie;
+import be.dijlezonen.dzwelg.models.transacties.UndoTransactie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -68,6 +69,32 @@ public class UserDetailFragment extends Fragment {
         @Override
         public void onDataChange(DataSnapshot dataSnapshot) {
             mLid = dataSnapshot.getValue(Lid.class);
+
+            Iterable<DataSnapshot> dataSnapshots = dataSnapshot.child("transacties").getChildren();
+
+            for (DataSnapshot snapshot : dataSnapshots)
+            {
+                Transactie.TransactieSoort soort =
+                        snapshot.child("soort").getValue(Transactie.TransactieSoort.class);
+
+                assert soort != null;
+
+                switch (soort)
+                {
+                    case CREDIT:
+                        CreditTransactie creditTransactie = snapshot.getValue(CreditTransactie.class);
+                        mLid.getTransacties().add(creditTransactie);
+                        break;
+                    case DEBIT:
+                        DebitTransactie debitTransactie = snapshot.getValue(DebitTransactie.class);
+                        mLid.getTransacties().add(debitTransactie);
+                        break;
+                    case UNDO:
+                        UndoTransactie undoTransactie = snapshot.getValue(UndoTransactie.class);
+                        mLid.getTransacties().add(undoTransactie);
+                        break;
+                }
+            }
             updateViews();
         }
 
@@ -104,37 +131,19 @@ public class UserDetailFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-        //updateViews();
-
-        List<Transactie> list = new ArrayList<>();
-
-
-        Consumptie c = new Consumptie();
-        c.setNaam("Colo");
-        c.setPrijs(10);
-
-        Consumptielijn k = new Consumptielijn(c);
-        k.setAantal(5);
-        ArrayList<Consumptielijn> consumpties = new ArrayList<>();
-
-        consumpties.add(k);
-        k.setAantal(1);
-        consumpties.add(k);
-
-        list.add(new CreditTransactie("user123", 5, "event"));
-        list.add(new DebitTransactie("user123", "event1", consumpties, 10));
-
-        TransactieArrayAdapter arrayAdapter =
-                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, list);
 
 
 
-        mTransactieLijst.setAdapter(arrayAdapter);
+
+
 
         return rootView;
     }
 
     private void updateViews() {
         mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
+        TransactieArrayAdapter arrayAdapter =
+                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, mLid.getTransacties());
+        mTransactieLijst.setAdapter(arrayAdapter);
     }
 }
