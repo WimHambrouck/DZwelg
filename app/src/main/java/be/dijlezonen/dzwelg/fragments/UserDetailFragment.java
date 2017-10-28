@@ -4,10 +4,15 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.ArrayAdapter;
+import android.widget.ListAdapter;
+import android.widget.ListView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -15,10 +20,19 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
+import java.util.List;
+
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.activities.UserDetailActivity;
 import be.dijlezonen.dzwelg.activities.UserListActivity;
+import be.dijlezonen.dzwelg.adapters.TransactieArrayAdapter;
+import be.dijlezonen.dzwelg.models.Consumptie;
+import be.dijlezonen.dzwelg.models.Consumptielijn;
 import be.dijlezonen.dzwelg.models.Lid;
+import be.dijlezonen.dzwelg.models.Transactie;
+import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
+import be.dijlezonen.dzwelg.models.transacties.DebitTransactie;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
@@ -36,6 +50,9 @@ public class UserDetailFragment extends Fragment {
 
     @BindView(R.id.user_detail_saldo)
     TextView mTxtSaldo;
+
+    @BindView(R.id.user_detail_transactie_list)
+    ListView mTransactieLijst;
 
 
     private CollapsingToolbarLayout mAppBarLayout;
@@ -56,7 +73,7 @@ public class UserDetailFragment extends Fragment {
 
         @Override
         public void onCancelled(DatabaseError databaseError) {
-
+            Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
         }
     };
 
@@ -88,6 +105,31 @@ public class UserDetailFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         //updateViews();
+
+        List<Transactie> list = new ArrayList<>();
+
+
+        Consumptie c = new Consumptie();
+        c.setNaam("Colo");
+        c.setPrijs(10);
+
+        Consumptielijn k = new Consumptielijn(c);
+        k.setAantal(5);
+        ArrayList<Consumptielijn> consumpties = new ArrayList<>();
+
+        consumpties.add(k);
+        k.setAantal(1);
+        consumpties.add(k);
+
+        list.add(new CreditTransactie("user123", 5, "event"));
+        list.add(new DebitTransactie("user123", "event1", consumpties, 10));
+
+        TransactieArrayAdapter arrayAdapter =
+                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, list);
+
+
+
+        mTransactieLijst.setAdapter(arrayAdapter);
 
         return rootView;
     }

@@ -3,6 +3,7 @@ package be.dijlezonen.dzwelg.models;
 import com.google.firebase.database.Exclude;
 
 import java.text.NumberFormat;
+import java.util.ArrayList;
 import java.util.Currency;
 import java.util.HashMap;
 import java.util.List;
@@ -124,6 +125,9 @@ public class Lid {
 
     @Exclude
     public List<Transactie> getTransacties() {
+        if(this.transacties == null)
+            this.transacties = new ArrayList<>();
+
         return transacties;
     }
 

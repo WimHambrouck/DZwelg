@@ -1,6 +1,7 @@
 package be.dijlezonen.dzwelg.models.transacties;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import be.dijlezonen.dzwelg.exceptions.SaldoOntoereikendException;
@@ -51,12 +52,29 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
         return consumptielijnen;
     }
 
-    @Override
-    public String toString() {
-        return "Debit";
-    }
-
     public double getBedrag() {
         return bedrag;
+    }
+
+    @Override
+    public String toString() {
+        Date d = new Date(getTimestampForKey());
+
+        StringBuilder sb =
+                new StringBuilder(d.toLocaleString() + " - Verkoop: " + formatteerSaldo(bedrag));
+
+        if (!consumptielijnen.isEmpty())
+        {
+            sb.append(" (").append(consumptielijnen.get(0).toString());
+
+            for (int i = 1; i < consumptielijnen.size(); i++)
+            {
+                sb.append(", ").append(consumptielijnen.get(i).toString());
+            }
+
+            sb.append(")");
+        }
+
+        return sb.toString();
     }
 }

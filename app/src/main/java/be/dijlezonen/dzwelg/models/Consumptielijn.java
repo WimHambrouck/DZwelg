@@ -20,4 +20,9 @@ public class Consumptielijn {
     public Consumptie getConsumptie() {
         return consumptie;
     }
+
+    @Override
+    public String toString() {
+        return aantal + " x " + consumptie.getNaam();
+    }
 }

@@ -2,6 +2,8 @@ package be.dijlezonen.dzwelg.models;
 
 import com.google.firebase.database.Exclude;
 
+import java.text.NumberFormat;
+import java.util.Currency;
 import java.util.Date;
 
 /**
@@ -61,5 +63,12 @@ public abstract class Transactie {
 
     public TransactieSoort getSoort() {
         return soort;
+    }
+
+    public String formatteerSaldo(double saldo)
+    {
+        NumberFormat format = NumberFormat.getCurrencyInstance();
+        format.setCurrency(Currency.getInstance("EUR"));
+        return format.format(saldo);
     }
 }

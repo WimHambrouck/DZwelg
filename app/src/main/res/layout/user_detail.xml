@@ -6,20 +6,75 @@
     android:padding="16dp"
     tools:context="be.dijlezonen.dzwelg.fragments.UserDetailFragment">
 
-    <TextView
-        android:id="@+id/user_detail_saldo"
-        style="@style/HugeText"
+
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:textIsSelectable="true"
-        tools:text="€ 10,50" />
+        android:orientation="horizontal">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/user_detail_transactie_recycler"
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/user_detail_saldo"
+                android:text="@string/saldo"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/user_detail_saldo"
+                style="@style/HugeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                tools:text="€ 10,50" />
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:labelFor="@+id/user_detail_extra_saldo"
+
+                android:text="@string/extra"
+                android:textSize="20sp" />
+
+            <TextView
+                android:id="@+id/user_detail_extra_saldo"
+                style="@style/HugeText"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:textIsSelectable="true"
+                tools:text="€ 5" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <TextView
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:text="@string/laatste_transacties"
 
-    </android.support.v7.widget.RecyclerView>
+        android:textSize="20sp" />
+
+    <ListView
+        android:id="@+id/user_detail_transactie_list"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+    </ListView>
 
 
 </LinearLayout>

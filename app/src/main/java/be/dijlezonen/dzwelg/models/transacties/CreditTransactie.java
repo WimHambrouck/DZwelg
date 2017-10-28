@@ -43,8 +43,8 @@ public class CreditTransactie extends Transactie implements ICanBeUndone {
 
     @Override
     public String toString() {
-        Date d = new Date(getTimestamp());
+        Date d = new Date(getTimestampForKey());
 
-        return d.toString() + " - Bedrag opgeladen: " + bedrag;
+        return d.toLocaleString() + " - Bedrag opgeladen: " + formatteerSaldo(bedrag);
     }
 }
