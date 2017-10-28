@@ -21,6 +21,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 import be.dijlezonen.dzwelg.R;
@@ -131,19 +132,15 @@ public class UserDetailFragment extends Fragment {
 
         ButterKnife.bind(this, rootView);
 
-
-
-
-
-
-
         return rootView;
     }
 
     private void updateViews() {
         mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
+        List<Transactie> transactieCopy = mLid.getTransacties().subList(0, mLid.getTransacties().size());
+        Collections.reverse(transactieCopy);
         TransactieArrayAdapter arrayAdapter =
-                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, mLid.getTransacties(), mLid);
+                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, transactieCopy, mLid);
         mTransactieLijst.setAdapter(arrayAdapter);
     }
 }

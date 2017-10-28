@@ -51,14 +51,6 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
         return null;
     }
 
-    public void setConsumptielijnen(List<Consumptielijn> consumptielijnen) {
-        this.consumptielijnen = consumptielijnen;
-    }
-
-    public void setBedrag(double bedrag) {
-        this.bedrag = bedrag;
-    }
-
     public List<Consumptielijn> getConsumptielijnen() {
         return consumptielijnen;
     }
