@@ -12,24 +12,3 @@ Gelieve volgende stappen te doorlopen om het probleem op te lossen:
     - [Voor prod (DZwelg)](https://console.firebase.google.com/project/dzwelg-b1f15/settings/general/android:be.dijlezonen.dzwelg)
 3. Zet beide bestanden in hun respectievelijke mappen, m.a.w. het JSON-bestand van DZwelg-dev in `/app/src/dev/` en het JSON-bestand van DZwelg in `/app/src/prod/`
 4. Gelieve deze bestanden **niet in te checken**, dit is immers een veiligheidsrisico (staan om deze reden ook in app/.gitignore).
-
-## Java 8
-Gezien voor somige features nieuwere Java-functionaliteiten (bv: Lamda's) worden gebruikt, heeft dit project Java 8 support enabled in app/build.gradle met volgende regels:
-```gradle
-android {
-  ...
-  defaultConfig {
-    ...
-    jackOptions {
-      enabled true
-    }
-  }
-  compileOptions {
-    sourceCompatibility JavaVersion.VERSION_1_8
-    targetCompatibility JavaVersion.VERSION_1_8
-  }
-}
-```
-Om Java 8 te laten werken, moet de Jack compiler worden gebruikt (zie `jackOptions` hierboven). Dit heeft als gevolg dat Instant Run niet beschikbaar is.
-
-**Dit staat echter op punt te veranderen bij vanaf Android Studio 3.0** (zie [issue #19](https://github.com/DeDijlezonen/DZwelg/issues/19))
