@@ -1,7 +1,6 @@
 package be.dijlezonen.dzwelg.activities;
 
 import android.app.ProgressDialog;
-import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
@@ -18,7 +17,6 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
-import com.google.firebase.database.ChildEventListener;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -80,19 +78,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //als gebruiker kassaverantwoordelijke is, mag hij aanmelden, anders niet
-                        boolean kassamens = false;
+                        boolean isKassabeheerder = false;
                         if(dataSnapshot.exists())
                         {
-                            kassamens = dataSnapshot.getValue(Boolean.class);
+                            isKassabeheerder = dataSnapshot.getValue(Boolean.class);
                         }
-                        if(kassamens)
+                        if(isKassabeheerder)
                         {
                             signInSucces();
                         } else {
                             AlertDialog.Builder builder = new AlertDialog.Builder(MainActivity.this);
                             builder.setTitle(android.R.string.dialog_alert_title);
                             builder.setMessage(R.string.fout_gebruiker_geen_rechten);
-                            builder.setNeutralButton(android.R.string.ok, (dialog, which) -> dialog.dismiss());
+                            builder.setNeutralButton(android.R.string.ok, (dialog, which) -> {
+                                dialog.dismiss();
+                                mProgressDialog.dismiss();
+                                firebaseAuth.signOut();
+                            });
                             builder.show();
                         }
                     }
@@ -173,11 +175,15 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void showProgressDialog() {
-        mProgressDialog = new ProgressDialog(this);
-        mProgressDialog.setIndeterminate(true);
-        mProgressDialog.setCancelable(false);
-        mProgressDialog.setMessage(getString(R.string.bezig_aanmelden));
-        mProgressDialog.show();
+        if(mProgressDialog == null)
+            mProgressDialog = new ProgressDialog(this);
+
+        if(!mProgressDialog.isShowing()) {
+            mProgressDialog.setIndeterminate(true);
+            mProgressDialog.setCancelable(false);
+            mProgressDialog.setMessage(getString(R.string.bezig_aanmelden));
+            mProgressDialog.show();
+        }
     }
 
     private class AuthCompleteListener implements OnCompleteListener<AuthResult> {
