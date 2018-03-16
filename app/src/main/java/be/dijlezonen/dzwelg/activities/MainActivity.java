@@ -78,12 +78,12 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public void onDataChange(DataSnapshot dataSnapshot) {
                         //als gebruiker kassaverantwoordelijke is, mag hij aanmelden, anders niet
-                        boolean isKassabeheerder = false;
+                        Boolean isKassabeheerder = false;
                         if(dataSnapshot.exists())
                         {
                             isKassabeheerder = dataSnapshot.getValue(Boolean.class);
                         }
-                        if(isKassabeheerder)
+                        if(isKassabeheerder != null && isKassabeheerder)
                         {
                             signInSucces();
                         } else {
