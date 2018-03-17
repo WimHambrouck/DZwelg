@@ -51,4 +51,5 @@
     <string name="dialog_alert_transactie_verwijderen_titel">Transactie ongedaan maken</string>
     <string name="dialog_transactie_ongedaan_maken_bericht">Wil u deze transactie ongedaan maken?</string>
     <string name="toas_fout_undo_transactie_ongedaan_maken">Deze transactie kan niet ongedaan gemaakt worden.</string>
+    <string name="saldo_ontoereikend">Saldo ontoereikend</string>
 </resources>

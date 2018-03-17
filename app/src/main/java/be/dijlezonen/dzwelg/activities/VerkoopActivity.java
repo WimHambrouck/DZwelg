@@ -1,6 +1,5 @@
 package be.dijlezonen.dzwelg.activities;
 
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
@@ -146,7 +145,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                 Toast.makeText(VerkoopActivity.this, getString(R.string.success_afgetrokken, mTotaal), Toast.LENGTH_SHORT).show();
                 finish();
             } catch (SaldoOntoereikendException e) {
-                Toast.makeText(VerkoopActivity.this, "saldo ontoereikend", Toast.LENGTH_SHORT).show();
+                Toast.makeText(VerkoopActivity.this, R.string.saldo_ontoereikend, Toast.LENGTH_SHORT).show();
             } catch (BedragException e) {
                 Toast.makeText(VerkoopActivity.this, e.getMessage(), Toast.LENGTH_SHORT).show();
             }

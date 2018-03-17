@@ -4,12 +4,9 @@ import android.app.Activity;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
-import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.ArrayAdapter;
-import android.widget.ListAdapter;
 import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -20,7 +17,6 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
-import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 
@@ -28,8 +24,6 @@ import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.activities.UserDetailActivity;
 import be.dijlezonen.dzwelg.activities.UserListActivity;
 import be.dijlezonen.dzwelg.adapters.TransactieArrayAdapter;
-import be.dijlezonen.dzwelg.models.Consumptie;
-import be.dijlezonen.dzwelg.models.Consumptielijn;
 import be.dijlezonen.dzwelg.models.Lid;
 import be.dijlezonen.dzwelg.models.Transactie;
 import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
@@ -55,7 +49,6 @@ public class UserDetailFragment extends Fragment {
 
     @BindView(R.id.user_detail_transactie_list)
     ListView mTransactieLijst;
-
 
     private CollapsingToolbarLayout mAppBarLayout;
 
@@ -103,6 +96,15 @@ public class UserDetailFragment extends Fragment {
         public void onCancelled(DatabaseError databaseError) {
             Toast.makeText(getContext(), databaseError.getMessage(), Toast.LENGTH_LONG).show();
         }
+
+        private void updateViews() {
+            mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
+            List<Transactie> transactieCopy = mLid.getTransacties().subList(0, mLid.getTransacties().size());
+            Collections.reverse(transactieCopy);
+            TransactieArrayAdapter arrayAdapter =
+                    new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, transactieCopy, mLid);
+            mTransactieLijst.setAdapter(arrayAdapter);
+        }
     };
 
     private void setUpAppBar() {
@@ -133,14 +135,5 @@ public class UserDetailFragment extends Fragment {
         ButterKnife.bind(this, rootView);
 
         return rootView;
-    }
-
-    private void updateViews() {
-        mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
-        List<Transactie> transactieCopy = mLid.getTransacties().subList(0, mLid.getTransacties().size());
-        Collections.reverse(transactieCopy);
-        TransactieArrayAdapter arrayAdapter =
-                new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, transactieCopy, mLid);
-        mTransactieLijst.setAdapter(arrayAdapter);
     }
 }
