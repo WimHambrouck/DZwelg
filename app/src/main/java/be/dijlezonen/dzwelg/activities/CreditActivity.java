@@ -127,6 +127,12 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
 
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
 
+                // toevoegen transactie aan lijst met "dirty" transacties
+                DatabaseReference newDirtyTransactie = FirebaseDatabase.getInstance()
+                        .getReference(getString(R.string.ref_transacties_dirty));
+                newDirtyTransactie.push().setValue(creditTransactie);
+
+
 //                UndoTransactie undoTransactie = new UndoTransactie(mLid.getId(), creditTransactie);
 //
 //

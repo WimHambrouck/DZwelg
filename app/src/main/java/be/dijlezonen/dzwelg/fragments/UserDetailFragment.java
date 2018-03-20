@@ -1,6 +1,7 @@
 package be.dijlezonen.dzwelg.fragments;
 
 import android.app.Activity;
+import android.content.Context;
 import android.os.Bundle;
 import android.support.design.widget.CollapsingToolbarLayout;
 import android.support.v4.app.Fragment;
@@ -41,6 +42,8 @@ import butterknife.ButterKnife;
 public class UserDetailFragment extends Fragment {
 
     public static final String ARG_USER_ID = "user_id";
+    private Context myContext;
+
 
     private Lid mLid;
 
@@ -101,8 +104,9 @@ public class UserDetailFragment extends Fragment {
             mTxtSaldo.setText(mLid.getSaldoGeformatteerd());
             List<Transactie> transactieCopy = mLid.getTransacties().subList(0, mLid.getTransacties().size());
             Collections.reverse(transactieCopy);
+
             TransactieArrayAdapter arrayAdapter =
-                    new TransactieArrayAdapter(getContext(), R.layout.user_detail_transactie_item, transactieCopy, mLid);
+                    new TransactieArrayAdapter(myContext, R.layout.user_detail_transactie_item, transactieCopy, mLid);
             mTransactieLijst.setAdapter(arrayAdapter);
         }
     };
@@ -114,6 +118,7 @@ public class UserDetailFragment extends Fragment {
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
+        myContext = getContext();
         super.onCreate(savedInstanceState);
 
         if (getArguments().containsKey(ARG_USER_ID)) {

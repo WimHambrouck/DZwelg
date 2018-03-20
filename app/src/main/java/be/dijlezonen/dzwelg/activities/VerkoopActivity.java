@@ -19,7 +19,9 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
@@ -136,11 +138,17 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                 mLid.debitSaldo(mTotaal);
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
 
+                // transactie opslaan op lid
                 DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), mEventId, consumptielijnen, mTotaal);
                 DatabaseReference debitRef = mLidRef
                         .child(getString(R.string.ref_transacties))
                         .child(String.valueOf(debitTransactie.getTimestampForKey()));
                 debitRef.setValue(debitTransactie);
+
+                // transactie in dirty lijst (zolang productie niet is afgesloten, blijven transacties "dirty")
+                DatabaseReference debitDirtyRef = FirebaseDatabase.getInstance()
+                        .getReference(getString(R.string.ref_transacties_dirty));
+                debitDirtyRef.push().getRef().setValue(debitTransactie);
 
                 Toast.makeText(VerkoopActivity.this, getString(R.string.success_afgetrokken, mTotaal), Toast.LENGTH_SHORT).show();
                 finish();

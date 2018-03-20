@@ -39,7 +39,7 @@
     <string name="nul_euro">0,00 €</string>
     <string name="afrekenen">Afrekenen</string>
     <string name="bedrag">Totaal:</string>
-    <string name="fout_inladen_leden">Fout bij inladen leden, check of je verbonden bent met internet.</string>
+    <string name="fout_inladen_leden">Fout bij inladen leden, controleer of je verbonden bent met internet.</string>
     <string name="success_opgeladen">%1$.2f euro opgeladen</string>
     <string name="success_afgetrokken">%1$.2f euro afgetrokken</string>
     <string name="ref_rollen">rollen</string>
@@ -52,4 +52,6 @@
     <string name="dialog_transactie_ongedaan_maken_bericht">Wil u deze transactie ongedaan maken?</string>
     <string name="toas_fout_undo_transactie_ongedaan_maken">Deze transactie kan niet ongedaan gemaakt worden.</string>
     <string name="saldo_ontoereikend">Saldo ontoereikend</string>
+    <string name="ref_transacties_dirty">transacties_dirty</string>
+    <string name="ref_totaal">totaal</string>
 </resources>
