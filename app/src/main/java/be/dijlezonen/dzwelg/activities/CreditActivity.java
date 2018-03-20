@@ -1,7 +1,6 @@
 package be.dijlezonen.dzwelg.activities;
 
 import android.app.DialogFragment;
-import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
@@ -128,20 +127,30 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
 
                 // toevoegen transactie aan lijst met "dirty" transacties
-                DatabaseReference newDirtyTransactie = FirebaseDatabase.getInstance()
+                DatabaseReference refDirtyTransacties = FirebaseDatabase.getInstance()
                         .getReference(getString(R.string.ref_transacties_dirty));
-                newDirtyTransactie.push().setValue(creditTransactie);
+                refDirtyTransacties.push().setValue(creditTransactie);
 
+                refDirtyTransacties.child(getString(R.string.ref_totaal)).addListenerForSingleValueEvent(new ValueEventListener() {
+                    @Override
+                    public void onDataChange(DataSnapshot dataSnapshot) {
+                        Double totaal = dataSnapshot.getValue(Double.class);
+                        if(totaal == null)
+                        {
+                            totaal = creditTransactie.getBedrag();
+                        } else {
+                            totaal+= creditTransactie.getBedrag();
+                        }
 
-//                UndoTransactie undoTransactie = new UndoTransactie(mLid.getId(), creditTransactie);
-//
-//
-//                DatabaseReference undodo = mLidRef
-//                        .child(getString(R.string.ref_transacties))
-//                        .child(String.valueOf(undoTransactie.getTimestampForKey())); //inverse timestamp voor automatische anti-chronologische sortering
-//                undodo.setValue(undoTransactie);
-//
-//                mLidRef.child(getString(R.string.ref_child_saldo)).setValue(creditTransactie.undoAction(mLid).getSaldo());
+                        refDirtyTransacties.child(getString(R.string.ref_totaal)).setValue(totaal);
+                    }
+
+                    @Override
+                    public void onCancelled(DatabaseError databaseError) {
+                        Log.d(LOG_TAG, "Firebase derped out: " + databaseError.getMessage());
+                        FirebaseCrash.log("Fout (onCancelled) bij updaten totaal in transacties_dirty: " + databaseError.getMessage());
+                    }
+                });
 
                 Toast.makeText(CreditActivity.this, getString(R.string.success_opgeladen, bedrag), Toast.LENGTH_SHORT).show();
                 finish();
