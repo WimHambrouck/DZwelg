@@ -111,7 +111,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
-            creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getId());
+            creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
             creditActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
             startActivity(creditActivity);
             mFab.close(false);
@@ -119,7 +119,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         mFabDebit.setOnClickListener(view -> {
             Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
-            verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getId());
+            verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
             verkoopActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
             startActivity(verkoopActivity);
             mFab.close(false);
@@ -215,7 +215,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                     mProgressDialog.dismiss();
                 }
                 Lid nieuwLid = dataSnapshot.getValue(Lid.class);
-                nieuwLid.setId(dataSnapshot.getKey());
+                nieuwLid.setUid(dataSnapshot.getKey());
                 if(nieuwLid.isLid()) {
                     mLeden.add(nieuwLid);
                     mGefilterdeLeden = mLeden;
@@ -284,7 +284,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 // collapse search view (zodra we op een lid krijgen, mag de filtering weg)
                 if (mTwoPane) {
                     Bundle arguments = new Bundle();
-                    arguments.putString(UserDetailFragment.ARG_USER_ID, lid.getId());
+                    arguments.putString(UserDetailFragment.ARG_USER_ID, lid.getUid());
                     UserDetailFragment fragment = new UserDetailFragment();
                     fragment.setArguments(arguments);
                     getSupportFragmentManager().beginTransaction()
@@ -294,7 +294,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 } else {
                     Context context = view.getContext();
                     Intent intent = new Intent(context, UserDetailActivity.class);
-                    intent.putExtra(UserDetailFragment.ARG_USER_ID, lid.getId());
+                    intent.putExtra(UserDetailFragment.ARG_USER_ID, lid.getUid());
                     context.startActivity(intent);
                 }
             });

@@ -119,7 +119,7 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
                 mLid.creditSaldo(bedrag);
 
                 //nieuwe creditTransactie om weg te schrijven naar transacties van gebruiker
-                CreditTransactie creditTransactie = new CreditTransactie(mLid.getId(), bedrag, mEventId, getKassaUser().getUid());
+                CreditTransactie creditTransactie = new CreditTransactie(mLid.getUid(), bedrag, mEventId, getKassaUser().getUid());
                 //transacties als key timestamp meegeven voor snellere ophaling later
                 DatabaseReference newTransactie = mLidRef
                         .child(getString(R.string.ref_transacties))

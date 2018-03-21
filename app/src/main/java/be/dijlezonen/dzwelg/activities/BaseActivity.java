@@ -14,7 +14,6 @@ public class BaseActivity extends AppCompatActivity {
 
     public FirebaseUser getKassaUser(){ return kassaUser; }
 
-
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

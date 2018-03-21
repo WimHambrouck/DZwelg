@@ -13,7 +13,7 @@ import be.dijlezonen.dzwelg.exceptions.BedragException;
 import be.dijlezonen.dzwelg.exceptions.SaldoOntoereikendException;
 
 public class Lid {
-    private String id;
+    private String uid;
     private String voornaam;
     private String achternaam;
     private double saldo;
@@ -68,12 +68,12 @@ public class Lid {
     }
 
 
-    public String getId() {
-        return id;
+    public String getUid() {
+        return uid;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setUid(String uid) {
+        this.uid = uid;
     }
 
     public String getVolledigeNaam() {
@@ -87,7 +87,6 @@ public class Lid {
         return format.format(saldo);
     }
 
-    @java.lang.SuppressWarnings("squid:S00122")
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;
@@ -95,12 +94,12 @@ public class Lid {
 
         Lid lid = (Lid) o;
 
-        return id != null ? id.equals(lid.id) : lid.id == null;
+        return uid != null ? uid.equals(lid.uid) : lid.uid == null;
     }
 
     @Override
     public int hashCode() {
-        return id != null ? id.hashCode() : 0;
+        return uid != null ? uid.hashCode() : 0;
     }
 
     public boolean isActiefInLijst() {
