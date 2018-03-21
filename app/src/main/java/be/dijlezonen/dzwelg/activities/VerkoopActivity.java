@@ -42,7 +42,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
-public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecyclerAdapter.ConsumptieRecyclerAdapterCallback {
+public class VerkoopActivity extends BaseActivity implements ConsumptieRecyclerAdapter.ConsumptieRecyclerAdapterCallback {
 
     private static final String LOG_TAG = VerkoopActivity.class.getSimpleName();
     private NumberFormat numberFormatter;
@@ -139,7 +139,7 @@ public class VerkoopActivity extends AppCompatActivity implements ConsumptieRecy
                 mLidRef.child(getString(R.string.ref_child_saldo)).setValue(mLid.getSaldo());
 
                 // transactie opslaan op lid
-                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), mEventId, consumptielijnen, mTotaal);
+                DebitTransactie debitTransactie = new DebitTransactie(mLid.getId(), mEventId, getKassaUser().getUid(), consumptielijnen, mTotaal);
                 DatabaseReference debitRef = mLidRef
                         .child(getString(R.string.ref_transacties))
                         .child(String.valueOf(debitTransactie.getTimestampForKey()));

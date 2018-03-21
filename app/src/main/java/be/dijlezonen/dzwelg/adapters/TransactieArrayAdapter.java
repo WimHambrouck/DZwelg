@@ -78,14 +78,14 @@ public class TransactieArrayAdapter extends ArrayAdapter<Transactie> {
                 CreditTransactie creditTransactie = (CreditTransactie) transactie;
                 try {
                     creditTransactie.undoAction(mLid);
-                    UndoTransactie undoTransactie = new UndoTransactie(transactie.getUserId(), transactie.getEventId(), creditTransactie);
+                    UndoTransactie undoTransactie = new UndoTransactie(transactie.getUserId(), transactie.getEventId(), transactie.getKassaverantwoordelijkeId(), creditTransactie);
                     mLid.getTransacties().add(undoTransactie);
                 } catch (SaldoOntoereikendException e) {
                     Toast.makeText(getContext(), e.getMessage(), Toast.LENGTH_SHORT).show();
                 }
             } else if (transactie instanceof DebitTransactie) {
                 DebitTransactie debitTransactie = (DebitTransactie) transactie;
-                UndoTransactie undoTransactie = new UndoTransactie(transactie.getUserId(), transactie.getEventId(), debitTransactie);
+                UndoTransactie undoTransactie = new UndoTransactie(transactie.getUserId(), transactie.getEventId(), transactie.getKassaverantwoordelijkeId(), debitTransactie);
                 mLid.getTransacties().add(undoTransactie);
             }
         }

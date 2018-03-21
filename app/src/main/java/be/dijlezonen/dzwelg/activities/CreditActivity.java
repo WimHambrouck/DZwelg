@@ -10,6 +10,8 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -28,7 +30,7 @@ import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 @java.lang.SuppressWarnings("squid:MaximumInheritanceDepth")
-public class CreditActivity extends AppCompatActivity implements EigenBedragDialogFragment.EigenBedragDialogListener {
+public class CreditActivity extends BaseActivity implements EigenBedragDialogFragment.EigenBedragDialogListener {
 
     private static final String LOG_TAG = CreditActivity.class.getSimpleName();
     private Lid mLid;
@@ -117,7 +119,7 @@ public class CreditActivity extends AppCompatActivity implements EigenBedragDial
                 mLid.creditSaldo(bedrag);
 
                 //nieuwe creditTransactie om weg te schrijven naar transacties van gebruiker
-                CreditTransactie creditTransactie = new CreditTransactie(mLid.getId(), bedrag, mEventId);
+                CreditTransactie creditTransactie = new CreditTransactie(mLid.getId(), bedrag, mEventId, getKassaUser().getUid());
                 //transacties als key timestamp meegeven voor snellere ophaling later
                 DatabaseReference newTransactie = mLidRef
                         .child(getString(R.string.ref_transacties))
