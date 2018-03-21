@@ -6,7 +6,7 @@ Tijdens het compileren kan volgende fout optreden als google-services.json niet 
 > File google-services.json is missing. The Google Services Plugin cannot function without it.
 
 Gelieve volgende stappen te doorlopen om het probleem op te lossen:
-1. Maak onder `/app/src` de mappen `dev` en `prod` aan (ter info: dit zijn de twee "product flavors" gespecifieerd in app/build.gradle)
+1. Maak onder `/app/src` de mappen `dev` en `prod` aan (ter info: dit zijn de twee "[product flavors](https://developer.android.com/studio/build/build-variants.html#product-flavors)" gespecifieerd in app/build.gradle)
 2. Download de `google-services.json` van Firebase in Settings.
     - [Voor dev (DZwelg-dev)](https://console.firebase.google.com/project/dzwelg-dev/settings/general/android:be.dijlezonen.dzwelg.dev)
     - [Voor prod (DZwelg)](https://console.firebase.google.com/project/dzwelg-b1f15/settings/general/android:be.dijlezonen.dzwelg)
