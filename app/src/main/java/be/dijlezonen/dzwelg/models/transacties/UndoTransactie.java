@@ -10,8 +10,8 @@ public class UndoTransactie extends Transactie {
     public UndoTransactie() {
     }
 
-    public UndoTransactie(String userId, String eventId, ICanBeUndone transactie) {
-        super(TransactieSoort.UNDO, userId, eventId);
+    public UndoTransactie(String userId, String eventId, String kassaverantwoordelijkeId, ICanBeUndone transactie) {
+        super(TransactieSoort.UNDO, userId, eventId, kassaverantwoordelijkeId);
         this.transactie = transactie;
     }
 

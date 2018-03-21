@@ -19,8 +19,8 @@ public class DebitTransactie extends Transactie implements ICanBeUndone {
     public DebitTransactie() {
     }
 
-    public DebitTransactie(String userId, String eventId, List<Consumptielijn> consumptielijnen, double bedrag) {
-        super(TransactieSoort.DEBIT, userId, eventId);
+    public DebitTransactie(String userId, String eventId, String kassaverantwoordelijkeId, List<Consumptielijn> consumptielijnen, double bedrag) {
+        super(TransactieSoort.DEBIT, userId, eventId, kassaverantwoordelijkeId);
         this.consumptielijnen = filterConsumptieLijnen(consumptielijnen);
         this.bedrag = bedrag;
     }

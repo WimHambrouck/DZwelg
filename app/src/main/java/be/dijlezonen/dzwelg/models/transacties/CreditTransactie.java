@@ -20,8 +20,8 @@ public class CreditTransactie extends Transactie implements ICanBeUndone {
     {
     }
 
-    public CreditTransactie(String userId, double bedrag, String eventId) {
-        super(TransactieSoort.CREDIT, userId, eventId);
+    public CreditTransactie(String userId, double bedrag, String eventId, String kassaverantwoordelijkeId) {
+        super(TransactieSoort.CREDIT, userId, eventId, kassaverantwoordelijkeId);
         this.bedrag = bedrag;
     }
 

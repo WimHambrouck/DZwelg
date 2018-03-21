@@ -13,6 +13,7 @@ import java.util.Date;
 public abstract class Transactie {
 
 
+
     public enum TransactieSoort {
         CREDIT, DEBIT, UNDO
     }
@@ -20,16 +21,18 @@ public abstract class Transactie {
     private String id;
     private String userId;
     private String eventId;
+    private String kassaverantwoordelijkeId;
     private long timestamp;
     private TransactieSoort soort;   //omdat het onmogelijk is vanuit Firebase db te weten welke subklasse het is
 
     public Transactie() {
     }
 
-    protected Transactie(TransactieSoort soort, String userId, String eventId) {
+    protected Transactie(TransactieSoort soort, String userId, String eventId, String kassaverantwoordelijkeId) {
         this.soort = soort;
         this.userId = userId;
         this.eventId = eventId;
+        this.kassaverantwoordelijkeId = kassaverantwoordelijkeId;
         this.timestamp = -1 * new Date().getTime(); // negatieve timestamp om antichronologisch te kunnen ordenen
     }
 
@@ -66,6 +69,14 @@ public abstract class Transactie {
 
     public TransactieSoort getSoort() {
         return soort;
+    }
+
+    public String getKassaverantwoordelijkeId() {
+        return kassaverantwoordelijkeId;
+    }
+
+    public void setKassaverantwoordelijkeId(String kassaverantwoordelijkeId) {
+        this.kassaverantwoordelijkeId = kassaverantwoordelijkeId;
     }
 
     public String formatteerSaldo(double saldo)
