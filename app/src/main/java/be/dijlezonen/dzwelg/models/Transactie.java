@@ -18,14 +18,15 @@ public abstract class Transactie {
         CREDIT, DEBIT, UNDO
     }
 
-    private String id;
     private String userId;
     private String eventId;
     private String kassaverantwoordelijkeId;
     private long timestamp;
     private TransactieSoort soort;   //omdat het onmogelijk is vanuit Firebase db te weten welke subklasse het is
 
+    @SuppressWarnings("WeakerAccess")
     public Transactie() {
+        // lege constructor voor Firebase
     }
 
     protected Transactie(TransactieSoort soort, String userId, String eventId, String kassaverantwoordelijkeId) {
@@ -38,9 +39,6 @@ public abstract class Transactie {
 
     public abstract String toString();
 
-    public String getId() {
-        return id;
-    }
 
     public long getTimestamp() {
         return timestamp;
@@ -59,10 +57,6 @@ public abstract class Transactie {
         return userId;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getEventId() {
         return eventId;
     }
@@ -79,7 +73,7 @@ public abstract class Transactie {
         this.kassaverantwoordelijkeId = kassaverantwoordelijkeId;
     }
 
-    public String formatteerSaldo(double saldo)
+    protected String formatteerSaldo(double saldo)
     {
         NumberFormat format = NumberFormat.getCurrencyInstance();
         format.setCurrency(Currency.getInstance("EUR"));
