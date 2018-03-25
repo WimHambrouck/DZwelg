@@ -4,14 +4,11 @@ import android.app.DialogFragment;
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AlertDialog;
-import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
-import com.google.firebase.auth.FirebaseAuth;
-import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -25,7 +22,6 @@ import be.dijlezonen.dzwelg.exceptions.BedragException;
 import be.dijlezonen.dzwelg.fragments.EigenBedragDialogFragment;
 import be.dijlezonen.dzwelg.models.Lid;
 import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
-import be.dijlezonen.dzwelg.models.transacties.UndoTransactie;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
@@ -131,7 +127,7 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
                 // toevoegen transactie aan lijst met "dirty" transacties
                 DatabaseReference refDirtyTransacties = FirebaseDatabase.getInstance()
                         .getReference(getString(R.string.ref_transacties_dirty));
-                refDirtyTransacties.push().setValue(creditTransactie);
+                refDirtyTransacties.child(Long.toString(creditTransactie.getTimestampForKey())).setValue(creditTransactie);
 
                 refDirtyTransacties.child(getString(R.string.ref_totaal)).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override

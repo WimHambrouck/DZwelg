@@ -2,7 +2,6 @@ package be.dijlezonen.dzwelg.activities;
 
 import android.os.Bundle;
 import android.support.v7.app.ActionBar;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -19,9 +18,7 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseException;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.MutableData;
 import com.google.firebase.database.Query;
-import com.google.firebase.database.Transaction;
 import com.google.firebase.database.ValueEventListener;
 
 import java.text.NumberFormat;
@@ -148,7 +145,7 @@ public class VerkoopActivity extends BaseActivity implements ConsumptieRecyclerA
                 // transactie in dirty lijst (zolang productie niet is afgesloten, blijven transacties "dirty")
                 DatabaseReference debitDirtyRef = FirebaseDatabase.getInstance()
                         .getReference(getString(R.string.ref_transacties_dirty));
-                debitDirtyRef.push().getRef().setValue(debitTransactie);
+                debitDirtyRef.child(Long.toString(debitTransactie.getTimestampForKey())).setValue(debitTransactie);
 
                 Toast.makeText(VerkoopActivity.this, getString(R.string.success_afgetrokken, mTotaal), Toast.LENGTH_SHORT).show();
                 finish();
