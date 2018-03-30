@@ -104,15 +104,18 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         dirtyTransacties.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
-                if(dataSnapshot != null) {
+                if (dataSnapshot != null) {
                     DataSnapshot eersteDirtyTransactie = dataSnapshot.getChildren().iterator().next();
                     String eventId = eersteDirtyTransactie.child("eventId").getValue(String.class);
                     String eventNaam = eersteDirtyTransactie.child("eventNaam").getValue(String.class);
+                    String timestamp = eersteDirtyTransactie.getKey();
+                    Date datum = new Date(Long.valueOf(timestamp));
+                    String eventDatum = SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum);
 
                     if (mEvent.getId().equals(eventId)) {
                         //zelfde event geopend: Vragen of verkoop moet hervat worden
                         AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-                        builder.setMessage(getString(R.string.dialog_lopende_repetitie, eventNaam))
+                        builder.setMessage(getString(R.string.dialog_lopende_repetitie, eventNaam, eventDatum))
                                 .setTitle(R.string.dialog_title_lopende_repetitie)
                                 .setPositiveButton(R.string.repetitie_hervatten, (dialog, which) -> {
                                     dialog.dismiss();
@@ -125,52 +128,20 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                         builder.show();
                     } else {
                         //ander event geopend, laten weten dat er nog een repetitie open staat
-                        String timestamp = eersteDirtyTransactie.getKey();
-
-                        Date datum = new Date(Long.valueOf(timestamp));
-
-                                AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-                                builder.setMessage("Er staat nog een repetitie open van " + eventNaam + " op " + SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum) +
-                                        "\nWil je deze afsluiten?")
-                                        .setTitle(R.string.dialog_title_lopende_repetitie)
-                                        .setPositiveButton("Repetitie afsluiten", (dialog, which) -> repetitieAfsluiten())
-                                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-                                            dialog.dismiss();
-                                            mProgressDialog.setMessage("Bezig met annuleren...");
-                                            navigateUpFromSameTask(UserListActivity.this);
-                                        })
-                                        .setCancelable(false);
-                                builder.show();
-
-//                        FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteiten) + "/" + eventId).child("titel").addListenerForSingleValueEvent(new ValueEventListener() {
-//                            @Override
-//                            public void onDataChange(DataSnapshot dataSnapshot) {
-//                                String otherEventTitle = dataSnapshot.getValue(String.class);
-//
-//                                Date datum = new Date(Long.valueOf(timestamp));
-//
-//                                AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-//                                builder.setMessage("Er staat nog een repetitie open van " + otherEventTitle + " op " + SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum) +
-//                                        "\nWil je deze afsluiten?")
-//                                        .setTitle(R.string.dialog_title_lopende_repetitie)
-//                                        .setPositiveButton("Repetitie afsluiten", (dialog, which) -> repetitieAfsluiten())
-//                                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-//                                            dialog.dismiss();
-//                                            mProgressDialog.setMessage("Bezig met laden...");
-//                                            navigateUpFromSameTask(UserListActivity.this);
-//                                        })
-//                                        .setCancelable(false);
-//                                builder.show();
-//                            }
-//
-//                            @Override
-//                            public void onCancelled(DatabaseError databaseError) {
-////todo
-//                            }
-//                        });
 
 
-
+                        AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
+                        builder.setMessage("Er staat nog een repetitie open van " + eventNaam + " gestart op " + eventDatum +
+                                "\nWil je deze afsluiten?")
+                                .setTitle(R.string.dialog_title_lopende_repetitie)
+                                .setPositiveButton("Repetitie afsluiten", (dialog, which) -> andereRepetitieAfsluiten(eventId))
+                                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    mProgressDialog.setMessage("Bezig met annuleren...");
+                                    navigateUpFromSameTask(UserListActivity.this);
+                                })
+                                .setCancelable(false);
+                        builder.show();
                     }
                 } else {
                     setupLedenEventListener();
@@ -214,6 +185,18 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             startActivity(verkoopActivity);
             mFab.close(false);
         });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    private void andereRepetitieAfsluiten(String eventId) {
+        Intent intent = new Intent(this, UserListActivity.class);
+        intent.putExtra("eventId", eventId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
     }
 
     private void repetitieAfsluiten() {
@@ -307,7 +290,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 }
                 Lid nieuwLid = dataSnapshot.getValue(Lid.class);
                 nieuwLid.setUid(dataSnapshot.getKey());
-                if(nieuwLid.isLid()) {
+                if (nieuwLid.isLid()) {
                     mLeden.add(nieuwLid);
                     mGefilterdeLeden = mLeden;
                     mRecyclerView.setAdapter(mAdapter);

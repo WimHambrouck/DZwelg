@@ -54,7 +54,7 @@
     <string name="saldo_ontoereikend">Saldo ontoereikend</string>
     <string name="ref_transacties_dirty">transacties_dirty</string>
     <string name="ref_totaal">totaal</string>
-    <string name="dialog_lopende_repetitie">Repetitie van (%1$s) is nog niet afgesloten. Wil je de verkoop hervatten of de repetitie afsluiten?</string>
+    <string name="dialog_lopende_repetitie">Repetitie van %1$s gestart op %2$s is nog niet afgesloten.\n\nWil je de verkoop hervatten of de repetitie afsluiten?</string>
     <string name="dialog_title_lopende_repetitie">Reeds lopende repetitie</string>
     <string name="repetitie_hervatten">Repetitie hervatten</string>
     <string name="repetitie_afsluiten">Repetitie afsluiten</string>
