@@ -97,9 +97,46 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
 
         mEvent = getIntent().getParcelableExtra(getString(R.string.extra_event));
 
+        ButterKnife.bind(this);
+
         initActionBar();
         showProgressDialog();
+        checkDirtyTransacties();
 
+        if (findViewById(R.id.user_detail_container) != null) {
+            // The detail container view will be present only in the
+            // large-screen layouts (res/values-w900dp).
+            // If this view is present, then the
+            // activity should be in two-pane mode.
+            mTwoPane = true;
+        }
+
+        // TODO: 15/07/2017  aparte listener met callbacks
+        searchView.setOnQueryTextListener(this);
+        searchView.setOnCloseListener(this);
+
+        setFabListeners();
+    }
+
+    private void setFabListeners() {
+        mFabCredit.setOnClickListener(v -> {
+            Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
+            creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
+            creditActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
+            startActivity(creditActivity);
+            mFab.close(false);
+        });
+
+        mFabDebit.setOnClickListener(view -> {
+            Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
+            verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
+            verkoopActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
+            startActivity(verkoopActivity);
+            mFab.close(false);
+        });
+    }
+
+    private void checkDirtyTransacties() {
         Query dirtyTransacties = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_transacties_dirty)).limitToFirst(1);
         dirtyTransacties.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
@@ -154,36 +191,6 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 Log.e(LOG_TAG, databaseError.getMessage());
                 FirebaseCrash.log(databaseError.getMessage());
             }
-        });
-
-        if (findViewById(R.id.user_detail_container) != null) {
-            // The detail container view will be present only in the
-            // large-screen layouts (res/values-w900dp).
-            // If this view is present, then the
-            // activity should be in two-pane mode.
-            mTwoPane = true;
-        }
-
-        ButterKnife.bind(this);
-
-        // TODO: 15/07/2017  aparte listener met callbacks
-        searchView.setOnQueryTextListener(this);
-        searchView.setOnCloseListener(this);
-
-        mFabCredit.setOnClickListener(v -> {
-            Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
-            creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
-            creditActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
-            startActivity(creditActivity);
-            mFab.close(false);
-        });
-
-        mFabDebit.setOnClickListener(view -> {
-            Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
-            verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
-            verkoopActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
-            startActivity(verkoopActivity);
-            mFab.close(false);
         });
     }
 
@@ -261,7 +268,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void initActionBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
         ActionBar actionBar = getSupportActionBar();
@@ -274,7 +281,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private void setupRecyclerView() {
         mLeden = new ArrayList<>();
         mGefilterdeLeden = new ArrayList<>();
-        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
+        mRecyclerView = findViewById(R.id.user_list);
         mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
         DatabaseReference mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
         Query q = mLedenRef.orderByChild("voornaam");
