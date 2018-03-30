@@ -107,10 +107,12 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 if(dataSnapshot != null) {
                     DataSnapshot eersteDirtyTransactie = dataSnapshot.getChildren().iterator().next();
                     String eventId = eersteDirtyTransactie.child("eventId").getValue(String.class);
+                    String eventNaam = eersteDirtyTransactie.child("eventNaam").getValue(String.class);
+
                     if (mEvent.getId().equals(eventId)) {
                         //zelfde event geopend: Vragen of verkoop moet hervat worden
                         AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-                        builder.setMessage(R.string.dialog_lopende_repetitie)
+                        builder.setMessage(getString(R.string.dialog_lopende_repetitie, eventNaam))
                                 .setTitle(R.string.dialog_title_lopende_repetitie)
                                 .setPositiveButton(R.string.repetitie_hervatten, (dialog, which) -> {
                                     dialog.dismiss();
@@ -124,27 +126,48 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                     } else {
                         //ander event geopend, laten weten dat er nog een repetitie open staat
                         String timestamp = eersteDirtyTransactie.getKey();
-                        FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteiten) + "/" + eventId).child("titel").addListenerForSingleValueEvent(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(DataSnapshot dataSnapshot) {
-                                String otherEventTitle = dataSnapshot.getValue(String.class);
 
-                                Date datum = new Date(Long.valueOf(timestamp));
+                        Date datum = new Date(Long.valueOf(timestamp));
 
                                 AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-                                builder.setMessage("Er staat nog een repetitie open van " + otherEventTitle + " op " + SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum))
+                                builder.setMessage("Er staat nog een repetitie open van " + eventNaam + " op " + SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum) +
+                                        "\nWil je deze afsluiten?")
                                         .setTitle(R.string.dialog_title_lopende_repetitie)
-                                        .setPositiveButton("Afsluiten", (dialog, which) -> dialog.dismiss())
-                                        .setNegativeButton("Anuleren", (dialog, which) -> dialog.dismiss())
+                                        .setPositiveButton("Repetitie afsluiten", (dialog, which) -> repetitieAfsluiten())
+                                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                            dialog.dismiss();
+                                            mProgressDialog.setMessage("Bezig met annuleren...");
+                                            navigateUpFromSameTask(UserListActivity.this);
+                                        })
                                         .setCancelable(false);
                                 builder.show();
-                            }
 
-                            @Override
-                            public void onCancelled(DatabaseError databaseError) {
-//todo
-                            }
-                        });
+//                        FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteiten) + "/" + eventId).child("titel").addListenerForSingleValueEvent(new ValueEventListener() {
+//                            @Override
+//                            public void onDataChange(DataSnapshot dataSnapshot) {
+//                                String otherEventTitle = dataSnapshot.getValue(String.class);
+//
+//                                Date datum = new Date(Long.valueOf(timestamp));
+//
+//                                AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
+//                                builder.setMessage("Er staat nog een repetitie open van " + otherEventTitle + " op " + SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum) +
+//                                        "\nWil je deze afsluiten?")
+//                                        .setTitle(R.string.dialog_title_lopende_repetitie)
+//                                        .setPositiveButton("Repetitie afsluiten", (dialog, which) -> repetitieAfsluiten())
+//                                        .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+//                                            dialog.dismiss();
+//                                            mProgressDialog.setMessage("Bezig met laden...");
+//                                            navigateUpFromSameTask(UserListActivity.this);
+//                                        })
+//                                        .setCancelable(false);
+//                                builder.show();
+//                            }
+//
+//                            @Override
+//                            public void onCancelled(DatabaseError databaseError) {
+////todo
+//                            }
+//                        });
 
 
 
@@ -191,6 +214,10 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             startActivity(verkoopActivity);
             mFab.close(false);
         });
+    }
+
+    private void repetitieAfsluiten() {
+        Toast.makeText(this, "AFSLUITEN", Toast.LENGTH_SHORT).show();
     }
 
     @Override
