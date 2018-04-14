@@ -34,7 +34,7 @@ public class EventListActivity extends AppCompatActivity implements EventListAda
 
         showProgressDialog();
 
-        Query dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteit))
+        Query dbRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_activiteiten))
                 .orderByChild("actief")
                 .startAt(true)
                 .endAt(true);

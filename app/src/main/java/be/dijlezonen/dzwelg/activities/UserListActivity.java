@@ -1,5 +1,6 @@
 package be.dijlezonen.dzwelg.activities;
 
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
@@ -27,8 +28,12 @@ import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
+import com.google.firebase.database.ValueEventListener;
 
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 import be.dijlezonen.dzwelg.R;
@@ -90,10 +95,13 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_user_list);
 
+        mEvent = getIntent().getParcelableExtra(getString(R.string.extra_event));
+
+        ButterKnife.bind(this);
+
         initActionBar();
         showProgressDialog();
-        setupLedenEventListener();
-        setupRecyclerView();
+        checkDirtyTransacties();
 
         if (findViewById(R.id.user_detail_container) != null) {
             // The detail container view will be present only in the
@@ -103,12 +111,14 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             mTwoPane = true;
         }
 
-        ButterKnife.bind(this);
-
         // TODO: 15/07/2017  aparte listener met callbacks
         searchView.setOnQueryTextListener(this);
         searchView.setOnCloseListener(this);
 
+        setFabListeners();
+    }
+
+    private void setFabListeners() {
         mFabCredit.setOnClickListener(v -> {
             Intent creditActivity = new Intent(UserListActivity.this, CreditActivity.class);
             creditActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
@@ -124,6 +134,80 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
             startActivity(verkoopActivity);
             mFab.close(false);
         });
+    }
+
+    private void checkDirtyTransacties() {
+        Query dirtyTransacties = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_transacties_dirty)).limitToFirst(1);
+        dirtyTransacties.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                if (dataSnapshot != null) {
+                    DataSnapshot eersteDirtyTransactie = dataSnapshot.getChildren().iterator().next();
+                    String eventId = eersteDirtyTransactie.child("eventId").getValue(String.class);
+                    String eventNaam = eersteDirtyTransactie.child("eventNaam").getValue(String.class);
+                    String timestamp = eersteDirtyTransactie.getKey();
+                    Date datum = new Date(Long.valueOf(timestamp));
+                    String eventDatum = SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum);
+
+                    if (mEvent.getId().equals(eventId)) {
+                        //zelfde event geopend: Vragen of verkoop moet hervat worden
+                        AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
+                        builder.setMessage(getString(R.string.dialog_lopende_repetitie, eventNaam, eventDatum))
+                                .setTitle(R.string.dialog_title_lopende_repetitie)
+                                .setPositiveButton(R.string.repetitie_hervatten, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    setupLedenEventListener();
+                                    setupRecyclerView();
+                                })
+                                .setNegativeButton(R.string.repetitie_afsluiten, (dialog, which) -> dialog.dismiss())
+                                .setCancelable(false);
+
+                        builder.show();
+                    } else {
+                        //ander event geopend, laten weten dat er nog een repetitie open staat
+
+
+                        AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
+                        builder.setMessage("Er staat nog een repetitie open van " + eventNaam + " gestart op " + eventDatum +
+                                "\nWil je deze afsluiten?")
+                                .setTitle(R.string.dialog_title_lopende_repetitie)
+                                .setPositiveButton("Repetitie afsluiten", (dialog, which) -> andereRepetitieAfsluiten(eventId))
+                                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                    dialog.dismiss();
+                                    mProgressDialog.setMessage("Bezig met annuleren...");
+                                    navigateUpFromSameTask(UserListActivity.this);
+                                })
+                                .setCancelable(false);
+                        builder.show();
+                    }
+                } else {
+                    setupLedenEventListener();
+                    setupRecyclerView();
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+                Log.e(LOG_TAG, databaseError.getMessage());
+                FirebaseCrash.log(databaseError.getMessage());
+            }
+        });
+    }
+
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+    }
+
+    private void andereRepetitieAfsluiten(String eventId) {
+        Intent intent = new Intent(this, UserListActivity.class);
+        intent.putExtra("eventId", eventId);
+        intent.setFlags(Intent.FLAG_ACTIVITY_SINGLE_TOP);
+        startActivity(intent);
+    }
+
+    private void repetitieAfsluiten() {
+        Toast.makeText(this, "AFSLUITEN", Toast.LENGTH_SHORT).show();
     }
 
     @Override
@@ -184,11 +268,8 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void initActionBar() {
-        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
-
-        mEvent = getIntent().getParcelableExtra(getString(R.string.extra_event));
-        assert mEvent != null;
 
         ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
@@ -200,7 +281,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     private void setupRecyclerView() {
         mLeden = new ArrayList<>();
         mGefilterdeLeden = new ArrayList<>();
-        mRecyclerView = (RecyclerView) findViewById(R.id.user_list);
+        mRecyclerView = findViewById(R.id.user_list);
         mAdapter = new LedenRecyclerViewAdapter(mGefilterdeLeden);
         DatabaseReference mLedenRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden));
         Query q = mLedenRef.orderByChild("voornaam");
@@ -216,7 +297,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
                 }
                 Lid nieuwLid = dataSnapshot.getValue(Lid.class);
                 nieuwLid.setUid(dataSnapshot.getKey());
-                if(nieuwLid.isLid()) {
+                if (nieuwLid.isLid()) {
                     mLeden.add(nieuwLid);
                     mGefilterdeLeden = mLeden;
                     mRecyclerView.setAdapter(mAdapter);
