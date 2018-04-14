@@ -20,6 +20,7 @@ import com.google.firebase.database.ValueEventListener;
 import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.exceptions.BedragException;
 import be.dijlezonen.dzwelg.fragments.EigenBedragDialogFragment;
+import be.dijlezonen.dzwelg.models.Activiteit;
 import be.dijlezonen.dzwelg.models.Lid;
 import be.dijlezonen.dzwelg.models.transacties.CreditTransactie;
 import butterknife.ButterKnife;
@@ -31,7 +32,7 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
     private static final String LOG_TAG = CreditActivity.class.getSimpleName();
     private Lid mLid;
     private DatabaseReference mLidRef;
-    private String mEventId;
+    private Activiteit mEvent;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,8 +47,9 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
 
     private void initLid() {
         Bundle myExtras = getIntent().getExtras();
+        assert myExtras != null;
         String lidId = myExtras.getString(getString(R.string.extra_lid_id));
-        mEventId = myExtras.getString(getString(R.string.extra_event_id));
+        mEvent = myExtras.getParcelable(getString(R.string.extra_event));
 
         if (lidId != null) {
             mLidRef = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_leden)).child(lidId);
@@ -115,7 +117,7 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
                 mLid.creditSaldo(bedrag);
 
                 //nieuwe creditTransactie om weg te schrijven naar transacties van gebruiker
-                CreditTransactie creditTransactie = new CreditTransactie(mLid.getUid(), bedrag, mEventId, getKassaUser().getUid());
+                CreditTransactie creditTransactie = new CreditTransactie(mLid.getUid(), bedrag, mEvent.getId(), getKassaUser().getUid());
                 //transacties als key timestamp meegeven voor snellere ophaling later
                 DatabaseReference newTransactie = mLidRef
                         .child(getString(R.string.ref_transacties))
@@ -149,6 +151,8 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
                         FirebaseCrash.log("Fout (onCancelled) bij updaten totaal in transacties_dirty: " + databaseError.getMessage());
                     }
                 });
+
+//                refDirtyTransacties.child("eventNaam").setValue(mEvent);
 
                 Toast.makeText(CreditActivity.this, getString(R.string.success_opgeladen, bedrag), Toast.LENGTH_SHORT).show();
                 finish();
