@@ -137,52 +137,72 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
     }
 
     private void checkDirtyTransacties() {
+        final String[] eventNaam = new String[1];
+
+        DatabaseReference eventNaamRef =
+                FirebaseDatabase.getInstance()
+                        .getReference(getString(R.string.ref_transacties_dirty))
+                        .child("eventNaam");
+        eventNaamRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                eventNaam[0] = dataSnapshot.getValue(String.class);
+            }
+
+            @Override
+            public void onCancelled(DatabaseError databaseError) {
+
+            }
+        });
+
+
         Query dirtyTransacties = FirebaseDatabase.getInstance().getReference(getString(R.string.ref_transacties_dirty)).limitToFirst(1);
         dirtyTransacties.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(DataSnapshot dataSnapshot) {
                 if (dataSnapshot != null) {
-                    DataSnapshot eersteDirtyTransactie = dataSnapshot.getChildren().iterator().next();
-                    String eventId = eersteDirtyTransactie.child("eventId").getValue(String.class);
-                    String eventNaam = eersteDirtyTransactie.child("eventNaam").getValue(String.class);
-                    String timestamp = eersteDirtyTransactie.getKey();
-                    Date datum = new Date(Long.valueOf(timestamp));
-                    String eventDatum = SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum);
+                    if (dataSnapshot.exists()) {
+                        DataSnapshot eersteDirtyTransactie = dataSnapshot.getChildren().iterator().next();
+                        String eventId = eersteDirtyTransactie.child("eventId").getValue(String.class);
+                        String timestamp = eersteDirtyTransactie.getKey();
+                        Date datum = new Date(Long.valueOf(timestamp));
+                        String eventDatum = SimpleDateFormat.getDateInstance(DateFormat.LONG).format(datum);
 
-                    if (mEvent.getId().equals(eventId)) {
-                        //zelfde event geopend: Vragen of verkoop moet hervat worden
-                        AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-                        builder.setMessage(getString(R.string.dialog_lopende_repetitie, eventNaam, eventDatum))
-                                .setTitle(R.string.dialog_title_lopende_repetitie)
-                                .setPositiveButton(R.string.repetitie_hervatten, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    setupLedenEventListener();
-                                    setupRecyclerView();
-                                })
-                                .setNegativeButton(R.string.repetitie_afsluiten, (dialog, which) -> dialog.dismiss())
-                                .setCancelable(false);
+                        if (mEvent.getId().equals(eventId)) {
+                            //zelfde event geopend: Vragen of verkoop moet hervat worden
+                            AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
+                            builder.setMessage(getString(R.string.dialog_lopende_repetitie, eventNaam[0], eventDatum))
+                                    .setTitle(R.string.dialog_title_lopende_repetitie)
+                                    .setPositiveButton(R.string.repetitie_hervatten, (dialog, which) -> {
+                                        dialog.dismiss();
+                                        setupLedenEventListener();
+                                        setupRecyclerView();
+                                    })
+                                    .setNegativeButton(R.string.repetitie_afsluiten, (dialog, which) -> dialog.dismiss())
+                                    .setCancelable(false);
 
-                        builder.show();
+                            builder.show();
+                        } else {
+                            //ander event geopend, laten weten dat er nog een repetitie open staat
+
+
+                            AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
+                            builder.setMessage("Er staat nog een repetitie open van " + eventNaam[0] + " gestart op " + eventDatum +
+                                    "\nWil je deze afsluiten?")
+                                    .setTitle(R.string.dialog_title_lopende_repetitie)
+                                    .setPositiveButton("Repetitie afsluiten", (dialog, which) -> andereRepetitieAfsluiten(eventId))
+                                    .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
+                                        dialog.dismiss();
+                                        mProgressDialog.setMessage("Bezig met annuleren...");
+                                        navigateUpFromSameTask(UserListActivity.this);
+                                    })
+                                    .setCancelable(false);
+                            builder.show();
+                        }
                     } else {
-                        //ander event geopend, laten weten dat er nog een repetitie open staat
-
-
-                        AlertDialog.Builder builder = new AlertDialog.Builder(UserListActivity.this);
-                        builder.setMessage("Er staat nog een repetitie open van " + eventNaam + " gestart op " + eventDatum +
-                                "\nWil je deze afsluiten?")
-                                .setTitle(R.string.dialog_title_lopende_repetitie)
-                                .setPositiveButton("Repetitie afsluiten", (dialog, which) -> andereRepetitieAfsluiten(eventId))
-                                .setNegativeButton(android.R.string.cancel, (dialog, which) -> {
-                                    dialog.dismiss();
-                                    mProgressDialog.setMessage("Bezig met annuleren...");
-                                    navigateUpFromSameTask(UserListActivity.this);
-                                })
-                                .setCancelable(false);
-                        builder.show();
+                        setupLedenEventListener();
+                        setupRecyclerView();
                     }
-                } else {
-                    setupLedenEventListener();
-                    setupRecyclerView();
                 }
             }
 

@@ -152,7 +152,7 @@ public class CreditActivity extends BaseActivity implements EigenBedragDialogFra
                     }
                 });
 
-//                refDirtyTransacties.child("eventNaam").setValue(mEvent);
+                refDirtyTransacties.child("eventNaam").setValue(mEvent.getTitel());
 
                 Toast.makeText(CreditActivity.this, getString(R.string.success_opgeladen, bedrag), Toast.LENGTH_SHORT).show();
                 finish();
