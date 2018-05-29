@@ -130,7 +130,7 @@ public class UserListActivity extends AppCompatActivity implements SearchView.On
         mFabDebit.setOnClickListener(view -> {
             Intent verkoopActivity = new Intent(UserListActivity.this, VerkoopActivity.class);
             verkoopActivity.putExtra(getString(R.string.extra_lid_id), mActiefLid.getUid());
-            verkoopActivity.putExtra(getString(R.string.extra_event), mEvent);
+            verkoopActivity.putExtra(getString(R.string.extra_event_id), mEvent.getId());
             startActivity(verkoopActivity);
             mFab.close(false);
         });
