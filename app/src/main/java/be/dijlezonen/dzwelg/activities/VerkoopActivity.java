@@ -12,6 +12,7 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.crash.FirebaseCrash;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -98,17 +99,15 @@ public class VerkoopActivity extends BaseActivity implements ConsumptieRecyclerA
                 .getReference(getString(R.string.ref_consumpties))
                 .orderByChild(getString(R.string.ref_child_naam));
 
+        FirebaseRecyclerOptions<Consumptie> options = new FirebaseRecyclerOptions.Builder<Consumptie>()
+                .setQuery(consumptieRef, Consumptie.class)
+                .build();
+
         FirebaseRecyclerAdapter<Consumptie, ConsumptieViewHolder> firebaseRecyclerAdapter =
-                new ConsumptieRecyclerAdapter(
-                        Consumptie.class,
-                        R.layout.consumptie_item,
-                        ConsumptieViewHolder.class,
-                        consumptieRef,
-                        this //voor callback methodes
-                );
+                new ConsumptieRecyclerAdapter(options, this);
 
         LinearLayoutManager llm = new LinearLayoutManager(this);
-        RecyclerView consumptiesRecyclerView = (RecyclerView) this.findViewById(R.id.consumpties_recycler_view);
+        RecyclerView consumptiesRecyclerView = this.findViewById(R.id.consumpties_recycler_view);
         consumptiesRecyclerView.setLayoutManager(llm);
         consumptiesRecyclerView.setAdapter(firebaseRecyclerAdapter);
     }

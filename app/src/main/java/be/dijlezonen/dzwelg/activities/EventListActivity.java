@@ -3,13 +3,18 @@ package be.dijlezonen.dzwelg.activities;
 import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.RecyclerView;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.ViewGroup;
 import android.widget.GridView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
@@ -39,7 +44,27 @@ public class EventListActivity extends AppCompatActivity implements EventListAda
                 .startAt(true)
                 .endAt(true);
 
-        GridView eventsGrid = ButterKnife.findById(this, R.id.gridEvents);
+        FirebaseRecyclerOptions<Activiteit> options = new FirebaseRecyclerOptions.Builder<Activiteit>()
+                .setQuery(dbRef, Activiteit.class)
+                .build();
+
+
+
+        GridView eventsGrid = findViewById(R.id.gridEvents);
+
+        FirebaseRecyclerAdapter<Activiteit, ActiviteitVH> adapter = new FirebaseRecyclerAdapter<Activiteit, ActiviteitVH>() {
+            @Override
+            protected void onBindViewHolder(@NonNull ActiviteitVH holder, int position, @NonNull Activiteit model) {
+
+            }
+
+            @NonNull
+            @Override
+            public ActiviteitVH onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+                return null;
+            }
+        };
+
         FirebaseListAdapter<Activiteit> fbList =
                 new EventListAdapter(this, Activiteit.class, R.layout.event, dbRef);
         eventsGrid.setAdapter(fbList);
@@ -80,5 +105,8 @@ public class EventListActivity extends AppCompatActivity implements EventListAda
         if (mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
+    }
+
+    private class ActiviteitVH extends RecyclerView. {
     }
 }

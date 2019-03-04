@@ -1,11 +1,14 @@
 package be.dijlezonen.dzwelg.adapters;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.NonNull;
 import android.view.View;
 import android.widget.TextView;
 
 import com.firebase.ui.database.FirebaseListAdapter;
+import com.firebase.ui.database.FirebaseListOptions;
 import com.google.firebase.database.Query;
 
 import be.dijlezonen.dzwelg.R;
@@ -17,28 +20,21 @@ public class EventListAdapter extends FirebaseListAdapter<Activiteit> {
 
     private EventListAdapterCallback callback;
 
-    /**
-     * @param activity    The activity containing the ListView
-     * @param modelClass  Firebase will marshall the data at a location into an instance of a class that you provide
-     * @param modelLayout This is the layout used to represent a single list item. You will be responsible for populating an
-     *                    instance of the corresponding view with the data from an instance of modelClass.
-     * @param ref         The Firebase location to watch for data changes. Can also be a slice of a location, using some
-     *                    combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
-     */
-    public EventListAdapter(Activity activity, Class<Activiteit> modelClass, int modelLayout, Query ref) {
-        super(activity, modelClass, modelLayout, ref);
-        callback = (EventListAdapterCallback) activity;
+    public EventListAdapter(@NonNull FirebaseListOptions<Activiteit> options, EventListAdapterCallback eventListAdapterCallback) {
+        super(options);
+        callback = eventListAdapterCallback;
     }
 
     @Override
-    protected void populateView(View v, Activiteit activiteit, int position) {
+    protected void populateView(@NonNull View v, @NonNull Activiteit model, int position) {
         callback.hideProgressbar();
-        TextView txtTitel = ButterKnife.findById(v, R.id.txt_event_titel);
-        txtTitel.setText(activiteit.getTitel());
+        TextView txtTitel = v.findViewById(R.id.txt_event_titel);
+        txtTitel.setText(model.getTitel());
         v.setOnClickListener(view -> {
-            Intent intent = new Intent(mActivity, UserListActivity.class);
-            intent.putExtra(mActivity.getString(R.string.extra_event), activiteit);
-            mActivity.startActivity(intent);
+            Context context = view.getContext();
+            Intent intent = new Intent(context, UserListActivity.class);
+            intent.putExtra(context.getString(R.string.extra_event), model);
+            context.startActivity(intent);
         });
     }
 

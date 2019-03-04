@@ -1,16 +1,21 @@
 package be.dijlezonen.dzwelg.adapters;
 
 import android.content.Context;
+import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.LayoutInflater;
 import android.view.View;
+import android.view.ViewGroup;
 import android.view.inputmethod.InputMethodManager;
 
 import com.firebase.ui.database.FirebaseRecyclerAdapter;
+import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.firebase.database.Query;
 
 import java.util.Locale;
 
+import be.dijlezonen.dzwelg.R;
 import be.dijlezonen.dzwelg.models.Consumptie;
 import be.dijlezonen.dzwelg.models.ConsumptieViewHolder;
 
@@ -26,14 +31,31 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
      * @param viewHolderClass The class that hold references to all sub-views in an instance modelLayout.
      * @param ref             The Firebase location to watch for data changes. Can also be a slice of a location, using some
      *                        combination of {@code limit()}, {@code startAt()}, and {@code endAt()}.
-     */
+     *
     public ConsumptieRecyclerAdapter(Class<Consumptie> modelClass, int modelLayout, Class<ConsumptieViewHolder> viewHolderClass, Query ref, ConsumptieRecyclerAdapterCallback callback) {
-        super(modelClass, modelLayout, viewHolderClass, ref);
+        this.layout = modelLayout;
         this.callback = callback;
+    }*/
+
+    /**
+     * Initialize a {@link RecyclerView.Adapter} that listens to a Firebase query. See
+     * {@link FirebaseRecyclerOptions} for configuration options.
+     *
+     * @param options
+     */
+    public ConsumptieRecyclerAdapter(@NonNull FirebaseRecyclerOptions<Consumptie> options, ConsumptieRecyclerAdapterCallback consumptieRecyclerAdapterCallback) {
+        super(options);
+        this.callback = consumptieRecyclerAdapterCallback;
+    }
+
+
+    private void hideKeyboard(View view) {
+        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
+        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
     }
 
     @Override
-    protected void populateViewHolder(ConsumptieViewHolder viewHolder, Consumptie model, int position) {
+    protected void onBindViewHolder(@NonNull ConsumptieViewHolder viewHolder, int position, @NonNull Consumptie model) {
         callback.addConsumptielijn(position, model);
 
         viewHolder.txtConsumptieNaam.setText(model.getNaam());
@@ -57,12 +79,15 @@ public class ConsumptieRecyclerAdapter extends FirebaseRecyclerAdapter<Consumpti
                 viewHolder.editHoeveelheid.setText(String.format(Locale.getDefault(), "%d", --aantal));
             }
         });
-
     }
 
-    private void hideKeyboard(View view) {
-        InputMethodManager imm = (InputMethodManager) view.getContext().getSystemService(Context.INPUT_METHOD_SERVICE);
-        imm.hideSoftInputFromWindow(view.getWindowToken(), 0);
+    @NonNull
+    @Override
+    public ConsumptieViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
+        View view = LayoutInflater
+                .from(parent.getContext())
+                .inflate(R.layout.consumptie_item, parent, false);
+        return new ConsumptieViewHolder(view);
     }
 
     private class HoeveelheidWatcher implements TextWatcher {
